@@ -1,26 +1,29 @@
 import json
 import afd
+import os
+
+afd_dict: dict = {}
+with open("exemplos/afd.json", "r") as file:
+    afd_dict = json.load(file)
 
 def test_afd_word_in_alphabet():
-    afd_dict: dict = {}
-    with open("exemplos/afd.json", "r") as file:
-        afd_dict = json.load(file)
-    assert afd.check_alphabet(afd_dict, "aaaaabbbb") == True, "Should be True"
+    result, char = afd.check_alphabet(afd_dict, "aaaaabbbb")
+    assert result == True, "Should be True"
+    assert char == "", "Should be empty"
 
 def test_afd_word_not_in_alphabet():
-    afd_dict: dict = {}
-    with open("exemplos/afd.json", "r") as file:
-        afd_dict = json.load(file)
-    assert afd.check_alphabet(afd_dict, "aaaaccbb") == False, "Should be False"
+    result, char = afd.check_alphabet(afd_dict, "aaaaccbb")
+    assert result == False, "Should be False"
+    assert char == "c", "Should be c"
 
 def test_afd_reconhecedor():
-    afd_dict: dict = {}
-    with open("exemplos/afd.json", "r") as file:
-        afd_dict = json.load(file)
     assert afd.reconhecedor(afd_dict, "abbb") == True, "Should be True"
 
 def test_afd_reconhecedor_false():
-    afd_dict: dict = {}
-    with open("exemplos/afd.json", "r") as file:
-        afd_dict = json.load(file)
     assert afd.reconhecedor(afd_dict, "aabb") == False, "Should be False"
+
+def test_afd_graphviz():
+    afd.graphviz(afd_dict)
+    assert os.path.isfile("automaton_graph.png") == True, "Should be True"
+
+afd.reconhecedor(afd_dict, "abbbccc")

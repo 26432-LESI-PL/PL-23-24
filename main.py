@@ -1,4 +1,6 @@
 import argparse
+import json
+import afd
 
 def main():
     parser = argparse.ArgumentParser(description='')
@@ -11,7 +13,19 @@ def main():
     parser.add_argument("-r", '--reconhecedor', type=str, help='Verificar se uma palavra é reconhecida', required=False)
 
     args = parser.parse_args()
-    print(args.file)
+    
+    file: dict = {}
+    with args.file as f:
+        file = json.load(f)
+
+    if args.det:
+        print("Autómato finito determinístico")
+        if args.reconhecedor:
+            afd.reconhecedor(file, args.reconhecedor)
+        elif args.graphviz:
+            afd.graphviz(file)
+        else:
+            print("Nenhuma ação especificada")
 
     #print(f"Result: {result}")
 
