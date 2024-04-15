@@ -1,5 +1,5 @@
 import json
-import afd
+import er
 import os
 import pytest
 
@@ -23,7 +23,7 @@ def test_re_to_nfa():
             }
         ]
     }
-    nfa = afd.re_to_nfa(re)
+    nfa, _ = er.re_to_nfa(re)  # Unpack the tuple
     assert nfa == "(a|b)c", "Should be (a|b)c"
 
 def test_nfa_to_json():
@@ -38,7 +38,7 @@ def test_nfa_to_json():
             "q2": {"a": "q2", "b": "q2"}
         }
     }
-    afd.nfa_to_json(nfa, "exemplos/nfa.json")
+    er.nfa_to_json(nfa, "exemplos/nfa.json")
     assert os.path.exists("exemplos/nfa.json"), "File should exist"
     with open("exemplos/nfa.json", "r") as file:
         nfa_file = json.load(file)
