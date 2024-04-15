@@ -41,31 +41,3 @@ def re_to_nfa(re):
 def nfa_to_json(nfa, filename):
     with open(filename, "w") as f:
         json.dump(nfa, f, indent=4)
-    
-def main():
-    re = {
-        "op": "alt",
-        "args": [
-            {
-                "op": "seq",
-                "args": [
-                    {
-                        "simb": "a"
-                    },
-                    {
-                        "op": "kle",
-                        "args": [
-                            {
-                                "simb": "b"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "simb": "c"
-            }
-        ]
-    }
-    nfa = re_to_nfa(re)
-    nfa_to_json(nfa, "nfa.json")
