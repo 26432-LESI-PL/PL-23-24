@@ -9,33 +9,33 @@ def setup_module(module):
 
 def test_re_to_nfa():
     re = {
-        "op": "seq",
+        "op": "alt",
         "args": [
+            {"simb": "a"},
             {
-                "op": "alt",
+                "op": "seq",
                 "args": [
                     {"simb": "a"},
-                    {"simb": "b"}
+                    {"op": "kle", "args": [{"simb": "b"}]}
                 ]
-            },
-            {
-                "simb": "c"
             }
         ]
     }
     nfa, _ = er.re_to_nfa(re)  # Unpack the tuple
-    assert nfa == "(a|b)c", "Should be (a|b)c"
-
+    assert nfa == "a|ab*", "Should be a|ab*"
+    
 def test_nfa_to_json():
     nfa = {
-        "Q": ["q0", "q1", "q2"],
-        "V": ["a", "b"],
-        "q0": "q0",
-        "F": ["q2"],
-        "delta": {
-            "q0": {"a": "q1", "b": "q2"},
-            "q1": {"a": "q1", "b": "q2"},
-            "q2": {"a": "q2", "b": "q2"}
+    "Q": ["q0", "q1", "q2", "q3", "q4", "q5"],
+    "V": ["a", "b"],
+    "q0": "q0",
+    "F": ["q5"],
+    "delta": {
+        "q0": {"op": "alt", "next": "q1"},
+        "q1": {"simb": "a", "next": "q2"},
+        "q2": {"op": "seq", "next": "q3"},
+        "q3": {"simb": "a", "next": "q4"},
+        "q4": {"op": "kle", "args": [{"simb": "b"}], "next": "q5"},
         }
     }
     er.nfa_to_json(nfa, "exemplos/nfa.json")
