@@ -1,11 +1,6 @@
 import json
 import er
 import os
-import pytest
-
-def setup_module(module):
-    if os.path.exists("exemplos/nfa.json"):
-        os.remove("exemplos/nfa.json")
 
 def test_re_to_nfa():
     re = {
@@ -23,9 +18,9 @@ def test_re_to_nfa():
     }
     nfa, _ = er.re_to_nfa(re)  # Unpack the tuple
     assert nfa == "a|ab*", "Should be a|ab*"
-    er.nfa_to_json(nfa, "exemplos/nfa.json")
-    assert os.path.exists("exemplos/nfa.json"), "File should exist"
-    with open("exemplos/nfa.json", "r") as file:
+    er.nfa_to_json(nfa, "er_nfa.json")
+    assert os.path.exists("er_nfa.json"), "File should exist"
+    with open("er_nfa.json", "r") as file:
         nfa_file = json.load(file)
     assert nfa == nfa_file, "Should be equal"
     
@@ -43,8 +38,8 @@ def test_nfa_to_json():
         "q4": {"op": "kle", "args": [{"simb": "b"}], "next": "q5"},
         }
     }
-    er.nfa_to_json(nfa, "exemplos/nfa.json")
-    assert os.path.exists("exemplos/nfa.json"), "File should exist"
-    with open("exemplos/nfa.json", "r") as file:
+    er.nfa_to_json(nfa, "nfa.json")
+    assert os.path.exists("nfa.json"), "File should exist"
+    with open("nfa.json", "r") as file:
         nfa_file = json.load(file)
     assert nfa == nfa_file, "Should be equal"
