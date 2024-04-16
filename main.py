@@ -11,6 +11,7 @@ def main():
     group.add_argument("-nd", '--ndet', action='store_true', help='Usar autómato finito não determinístico')
     parser.add_argument("-g", '--graphviz', action='store_true', help='Usar Graphviz', required=False)
     parser.add_argument("-r", '--reconhecedor', type=str, help='Verificar se uma palavra é reconhecida', required=False)
+    parser.add_argument("-o", '--output', type=str, help='Guardar ficheiro AFND em JSON', required=False)
 
     args = parser.parse_args()
     
@@ -24,6 +25,8 @@ def main():
             afd.reconhecedor(file, args.reconhecedor)
         elif args.graphviz:
             afd.graphviz(file)
+        elif args.output:
+            afd.output(file, args.output)
         else:
             print("Nenhuma ação especificada")
 
