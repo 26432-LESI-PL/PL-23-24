@@ -3,15 +3,20 @@ import json
 import afd
 
 def main():
-    parser = argparse.ArgumentParser(description='')
-    parser.add_argument("-f", '--file', type=open, help='Nome do ficheiro JSON a ser lido', required=True)
+    parser = argparse.ArgumentParser(description="Programa em Pytho para Processamento de Linguagens")
+    parser.add_argument("-f", "--file", type=open, help="Nome do ficheiro JSON a ser lido", required=True)
+
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("-d", '--det', action='store_true', help='Usar autómato finito determinístico')
-    group.add_argument("-er", '--er', action='store_true', help='Usar expressão regular')
-    group.add_argument("-nd", '--ndet', action='store_true', help='Usar autómato finito não determinístico')
-    parser.add_argument("-g", '--graphviz', action='store_true', help='Usar Graphviz', required=False)
-    parser.add_argument("-r", '--reconhecedor', type=str, help='Verificar se uma palavra é reconhecida', required=False)
-    parser.add_argument("-o", '--output', type=str, help='Guardar ficheiro AFND em JSON', required=False)
+    group.add_argument("-d", "--det", action="store_true", help="Usar autómato finito determinístico")
+    group.add_argument("-er", "--er", action="store_true", help="Usar expressão regular")
+    group.add_argument("-nd", "--ndet", action="store_true", help="Usar autómato finito não determinístico")
+
+    det_group = parser.add_argument_group("Autómato Finito Determinístico")
+    det_group.add_argument("-g", "--graphviz", action="store_true", help="Usar Graphviz", required=False)
+    det_group.add_argument("-r", "--reconhecedor", type=str, help="Verificar se uma palavra é reconhecida", required=False)
+
+    er_group = parser.add_argument_group("Expressão Regular")
+    er_group.add_argument("-o", "--output", type=str, help="Guardar ficheiro AFND em JSON", required=False)
 
     args = parser.parse_args()
     
@@ -19,11 +24,15 @@ def main():
     with args.file as f:
         file = json.load(f)
 
+    # Validar os argumentos
+    if (args.reconhecedor or args.graphviz) and not args.det:
+        parser.error("O argumento -r/--reconhecedor ou -g/--graphviz só pode ser usado com o argumento -d/--det")
+
     if args.det:
         print("Autómato finito determinístico")
         if args.reconhecedor:
             afd.reconhecedor(file, args.reconhecedor)
-        elif args.graphviz:
+        if args.graphviz:
             afd.graphviz(file)
         elif args.output:
             afd.output(file, args.output)
