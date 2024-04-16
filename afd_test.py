@@ -3,7 +3,7 @@ import afd
 import os
 
 afd_dict: dict = {}
-with open("exemplos/afd.json", "r") as file:
+with open("exemplos/afd.json", "r", encoding="utf8") as file:
     afd_dict = json.load(file)
 
 def test_afd_word_in_alphabet():

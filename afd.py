@@ -38,7 +38,7 @@ def graphviz(afd: dict):
     dot = Digraph(comment="Automato Finito Deterministico")
     dot.node("start", shape="none", label="")
     dot.edge("start", afd["q0"], label="")
-    for state in afd["delta"].keys():
+    for state in afd["Q"]:
         if state in afd["F"]:
             dot.node(state, state, shape="doublecircle")
         else:

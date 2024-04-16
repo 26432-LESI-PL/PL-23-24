@@ -2,6 +2,7 @@ import argparse
 import json
 import afd
 import er
+import afnd
 
 def main():
     parser = argparse.ArgumentParser(description="Programa em Pytho para Processamento de Linguagens")
@@ -24,8 +25,10 @@ def main():
         file = json.load(f)
 
     # Validar os argumentos
-    if (args.reconhecedor and args.graphviz) and not args.det:
-        parser.error("O argumento -r/--reconhecedor ou -g/--graphviz só pode ser usado com o argumento -d/--det")
+    if args.reconhecedor and not args.det:
+        parser.error("O argumento -r/--reconhecedor só pode ser usado com o argumento -d/--det")
+    elif args.graphviz and not (args.det or args.ndet):
+        parser.error("O argumento -g/--graphviz só pode ser usado com o argumento -d/--det ou -nd/--ndet")
 
     if args.det:
         print("Autómato finito determinístico")
@@ -39,10 +42,17 @@ def main():
     if args.er:
         print("Expressão regular")
         if args.output:
-            er.output(file, args.output)
+            pass
+            #er.output(file, args.output)
         else:
             print("Nenhuma ação especificada")
 
+    if args.ndet:
+        print("Autómato finito não determinístico")
+        if args.graphviz:
+            afnd.graphviz(file)
+        else:
+            print("Nenhuma ação especificada")
     #print(f"Result: {result}")
 
 if __name__ == "__main__":

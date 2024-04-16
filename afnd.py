@@ -1,6 +1,5 @@
 from graphviz import Digraph
 
-
 def graphviz(afnd: dict):
     dot = Digraph(comment="Automato Finito Não Deterministico")
     dot.node("start", shape="none", label="")

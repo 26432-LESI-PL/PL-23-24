@@ -165,3 +165,5 @@ afd_graph
 afd_graph.png
 afnd_graph
 afnd_graph.png
+er_nfa.json
+nfa.json
