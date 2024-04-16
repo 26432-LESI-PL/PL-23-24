@@ -38,4 +38,4 @@ jobs:
         flake8 . --exclude aulas,exemplos,Include,Lib,Scripts --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest --ignore=Scripts --ignore=Lib --ignore=Include --ignore=aulas
+        pytest --ignore=aulas
