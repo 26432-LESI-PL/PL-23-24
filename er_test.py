@@ -23,6 +23,11 @@ def test_re_to_nfa():
     }
     nfa, _ = er.re_to_nfa(re)  # Unpack the tuple
     assert nfa == "a|ab*", "Should be a|ab*"
+    er.nfa_to_json(nfa, "exemplos/nfa.json")
+    assert os.path.exists("exemplos/nfa.json"), "File should exist"
+    with open("exemplos/nfa.json", "r") as file:
+        nfa_file = json.load(file)
+    assert nfa == nfa_file, "Should be equal"
     
 def test_nfa_to_json():
     nfa = {
