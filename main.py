@@ -38,11 +38,7 @@ def main():
 
     if args.er:
         print("Expressão regular")
-        if args.reconhecedor:
-            er.reconhecedor(file, args.reconhecedor)
-        if args.graphviz:
-            er.graphviz(file)
-        elif args.output:
+        if args.output:
             er.output(file, args.output)
         else:
             print("Nenhuma ação especificada")
