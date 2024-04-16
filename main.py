@@ -1,6 +1,7 @@
 import argparse
 import json
 import afd
+import er
 
 def main():
     parser = argparse.ArgumentParser(description='')
@@ -26,7 +27,7 @@ def main():
         elif args.graphviz:
             afd.graphviz(file)
         elif args.output:
-            afd.output(file, args.output)
+            er.output(file, args.output)
         else:
             print("Nenhuma ação especificada")
 
