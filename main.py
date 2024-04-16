@@ -33,7 +33,12 @@ def main():
             afd.reconhecedor(file, args.reconhecedor)
         if args.graphviz:
             afd.graphviz(file)
-        elif args.output:
+        else:
+            print("Nenhuma ação especificada")
+
+    if args.er:
+        print("Expressão regular")
+        if args.output:
             er.output(file, args.output)
         else:
             print("Nenhuma ação especificada")
