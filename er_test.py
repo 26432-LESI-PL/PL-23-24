@@ -43,3 +43,20 @@ def test_afnd_json():
     with open("nfa.json", "r") as file:
         nfa_file = json.load(file)
     assert nfa == nfa_file, "Should be equal"
+
+
+a = er.output({
+    "op": "alt",
+    "args": [
+        {"simb": "a"},
+        {
+            "op": "seq",
+            "args": [
+                {"simb": "a"},
+                {"op": "kle", "args": [{"simb": "b"}]}
+            ]
+        }
+    ]
+})
+
+er.afnd_json(a, "er_nfa.json")

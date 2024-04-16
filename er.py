@@ -20,21 +20,21 @@ operadores : dict = {
     "trans": (trans, 2) 		# fecho transitivo +
 }
 
-def output(er):
+def output(er: dict): 
     # Avalia operadores, símbolos e epsilon
-    if isinstance(er, dict):
-        if 'op' in er:  # Avalia operações
-            op, op_priority = operadores[er['op']]
-            args_res = [output(a) for a in er['args']]
-            # Processa os argumentos com base na prioridade
-            processed_args = [a[0] if op_priority < a[1] else f'({a[0]})' for a in args_res]
-            return op(processed_args), op_priority
+    if 'op' in er:  # Avalia operações
+        op, op_priority = operadores[er['op']]
+        args_res = [output(a) for a in er['args']]
+        # Processa os argumentos com base na prioridade
+        processed_args = [a[0] if op_priority < a[1] else f'({a[0]})' for a in args_res]
+        return op(processed_args), op_priority
 
-        elif 'simb' in er:
-            return er['simb'], 3
+    elif 'simb' in er:
+        return er['simb'], 3
 
-        elif 'epsilon' in er:
-            return 'ε', 3
+    elif 'epsilon' in er:
+        return 'ε', 3
+        
 
     raise Exception("Formato de árvore de expressão regular inválido")
 
