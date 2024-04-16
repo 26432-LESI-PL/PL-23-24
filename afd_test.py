@@ -27,4 +27,4 @@ def test_afd_reconhecedor_not_final_state():
 
 def test_afd_graphviz():
     afd.graphviz(afd_dict)
-    assert os.path.isfile("automaton_graph.png") == True, "Should be True"
+    assert os.path.isfile("afd_graph.png") == True, "Should be True"

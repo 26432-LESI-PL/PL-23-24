@@ -29,15 +29,15 @@ def reconhecedor(afd: dict, word: str) -> bool:
         else:
             print("Não existe caminho válido para o símbolo \"" + char + "\" na transição do estado \"" + estado_atual + "\"")
             return False
-    print("Caminho: ", ' -> '.join(path))  # Print the path
+    print("Caminho: ", " -> ".join(path))  # Print caminho
     if estado_atual not in afd["F"]:
         print("Caminho terminou num estado não final")
     return estado_atual in afd["F"]
 
 def graphviz(afd: dict):
-    dot = Digraph(comment='Automato Finito Deterministico')
-    dot.node('start', shape='none', label='')
-    dot.edge('start', afd["q0"], label='')
+    dot = Digraph(comment="Automato Finito Deterministico")
+    dot.node("start", shape="none", label="")
+    dot.edge("start", afd["q0"], label="")
     for state in afd["delta"].keys():
         if state in afd["F"]:
             dot.node(state, state, shape="doublecircle")
@@ -46,4 +46,4 @@ def graphviz(afd: dict):
     for estado_inicial, transitions in afd["delta"].items():
         for simbolo, estado_final in transitions.items():
             dot.edge(estado_inicial, estado_final, label = simbolo)
-    dot.render('automaton_graph', view=True, format='png')
+    dot.render("afd_graph", view=True, format="png")

@@ -161,4 +161,7 @@ cython_debug/
 
 automaton_graph
 automaton_graph.png
-nfa.json
+afd_graph
+afd_graph.png
+afnd_graph
+afnd_graph.png
