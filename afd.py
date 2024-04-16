@@ -15,19 +15,23 @@ def reconhecedor(afd: dict, word: str) -> bool:
         return False
     word = word.replace("ε", "")
     estado_atual = afd["q0"]
-    path = [estado_atual]  # Start the path with the initial state
+    # Começa no estado inicial
+    path = [estado_atual]  
     for char in word:
         if char in afd["delta"][estado_atual]:
             estado_atual = afd["delta"][estado_atual][char]
-            path.append(estado_atual)  # Add the new state to the path
+            path.append(estado_atual)  # Adiciona o novo estado ao caminho
         elif "ε" in afd["delta"][estado_atual]:
             estado_atual_aux = afd["delta"][estado_atual]["ε"]
             if char in afd["delta"][estado_atual_aux]:
                 estado_atual = afd["delta"][estado_atual_aux][char]
-                path.append(estado_atual)  # Add the new state to the path
+                path.append(estado_atual)  # Adiciona o novo estado ao caminho
         else:
+            print("Não existe caminho válido para o símbolo \"" + char + "\" na transição do estado \"" + estado_atual + "\"")
             return False
-    print("Path: ", ' -> '.join(path))  # Print the path
+    print("Caminho: ", ' -> '.join(path))  # Print the path
+    if estado_atual not in afd["F"]:
+        print("Caminho terminou num estado não final")
     return estado_atual in afd["F"]
 
 def graphviz(afd: dict):
