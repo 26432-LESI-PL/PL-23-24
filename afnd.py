@@ -154,8 +154,3 @@ def nfa_to_dfa(nfa):
                 unmarked_states.append(U)
             dfa["delta"].setdefault(''.join(sorted(T)), {})[symbol] = ''.join(sorted(U))
     return json.dumps(dfa, indent=4)
-
-with open("exemplos/afnd.json", "r", encoding="utf8") as file:
-    afnd = json.load(file)
-    afd = nfa_to_dfa(afnd)
-    print(afd)
