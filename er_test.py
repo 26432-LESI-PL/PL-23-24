@@ -27,6 +27,6 @@ def test_regex_to_nfa():
             nfa_file = json.load(file)
     assert nfa == nfa_file, "Should be equal"
 
-    def test_er_graphviz():
-        er.graphviz(er_dict)
+def test_er_graphviz():
+    er.graphviz(er_dict)
     assert os.path.isfile("automaton_graph_2.png") == True, "Should be True"
