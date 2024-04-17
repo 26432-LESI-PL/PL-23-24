@@ -17,34 +17,34 @@ def graphviz(afnd: dict):
                 dot.edge(state, next_state, label=transition)
     dot.render("afnd_graph", view=True, format="png")
 
-def convert_to_afd(afnd: dict) -> dict:
+def convert_to_afd(afnd):
     afd = {
         "Q": [],
         "V": afnd["V"],
-        "q0": afnd["q0"],
-        "F": [],
-        "delta": {}
+        "delta": {},
+        "q0": [afnd["q0"]],
+        "F": []
     }
-    # Adiciona os estados do AFND ao AFD
-    for state in afnd["Q"]:
+    queue = [afd["q0"]]
+    while queue:
+        state = queue.pop(0)
         afd["Q"].append(state)
-        afd["delta"][state] = {}
-    # Adiciona os estados finais do AFND ao AFD
-    for state in afnd["F"]:
-        afd["F"].append(state)
-    # Adiciona as transições do AFND ao AFD
-    for state in afnd["Q"]:
-        if state in afnd["delta"]:
-            for transition in afnd["delta"][state].keys():
-                for next_state in afnd["delta"][state][transition]:
-                    if transition not in afd["delta"][state]:
-                        afd["delta"][state][transition] = next_state
-                    else:
-                        afd["delta"][state][transition] += next_state
+        afd["delta"][str(state)] = {}
+        for symbol in afd["V"]:
+            next_state = []
+            for substate in state:
+                if symbol in afnd["delta"].get(substate, {}):
+                    next_state += afnd["delta"][substate][symbol]
+            next_state = list(set(next_state))  # remove duplicates
+            if next_state and next_state not in afd["Q"]:
+                queue.append(next_state)
+            afd["delta"][str(state)][symbol] = next_state
+        if any(substate in afnd["F"] for substate in state):
+            afd["F"].append(state)
     return afd
-
 
 afd_dict: dict = {}
 with open("exemplos/afnd.json", "r", encoding="utf8") as file:
     afd_dict = json.load(file)
+
 print(convert_to_afd(afd_dict))
