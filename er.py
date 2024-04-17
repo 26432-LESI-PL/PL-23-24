@@ -1,43 +1,70 @@
 import json
+from graphviz import Digraph
 
-def alt(args): 
-    return f'{args[0]}|{args[1]}'
+def regex_to_nfa(regex: dict):
+    if "simb" in regex:
+        return {"Q": ["q0", "q1"], "V": [regex["simb"]], "q0": "q0", "F": ["q1"], "delta": {"q0": {"simb": regex["simb"], "next": "q1"}}}
+    else:
+        op = regex["op"]
+        args = regex["args"]
+        if op == "alt":
+            nfa1 = regex_to_nfa(args[0])
+            nfa2 = regex_to_nfa(args[1])
+            return alt_nfa(nfa1, nfa2)
+        elif op == "seq":
+            nfa1 = regex_to_nfa(args[0])
+            nfa2 = regex_to_nfa(args[1])
+            return seq_nfa(nfa1, nfa2)
+        elif op == "kle":
+            nfa = regex_to_nfa(args[0])
+            return kle_nfa(nfa)
 
-def seq(args):
-    return f'{args[0]}{args[1]}'
+def alt_nfa(nfa1: dict, nfa2: dict) -> dict:
+    Q = list(set(["q0"] + nfa1["Q"] + nfa2["Q"]))
+    V = list(set(nfa1["V"] + nfa2["V"]))
+    q0 = "q0"
+    F = list(set(nfa1["F"] + nfa2["F"]))
+    delta = {"q0": {"op": "alt", "next": [nfa1["q0"], nfa2["q0"]]}}
 
-def kle(args):
-    return f'{args[0]}*'
+    delta.update(nfa1["delta"])
+    delta.update(nfa2["delta"])
+    return {"Q": Q, "V": V, "q0": q0, "F": F, "delta": delta}
 
-def trans(args):
-    return f'{args[0]}+'
+def seq_nfa(nfa1: dict, nfa2: dict) -> dict:
+    Q = list(set(nfa1["Q"] + nfa2["Q"]))
+    V = list(set(nfa1["V"] + nfa2["V"]))
+    q0 = nfa1["q0"]
+    F = nfa2["F"]
+    delta = nfa1["delta"]
+    delta.update(nfa2["delta"])
+    delta[nfa1["F"][0]] = {"op": "seq", "next": nfa2["q0"]}
+    return {"Q": Q, "V": V, "q0": q0, "F": F, "delta": delta}
 
+def kle_nfa(nfa: dict) -> dict:
+    Q = list(set(["q0"] + nfa["Q"]))
+    V = list(set(nfa["V"]))
+    q0 = "q0"
+    F = list(set(nfa["F"] + ["q0"]))
+    delta = {"q0": {"op": "kle", "next": nfa["q0"]}}
+    delta.update(nfa["delta"])
+    delta[nfa["F"][0]] = {"op": "kle", "next": nfa["q0"]}
+    return {"Q": Q, "V": V, "q0": q0, "F": F, "delta": delta}
 
-operadores : dict = {
-    "alt": (alt, 0),			# união 		   |
-    "seq": (seq, 1),			# concatenação     .
-    "kle": (kle, 2),			# fecho de kleene  *
-    "trans": (trans, 2) 		# fecho transitivo +
-}
+def afnd_json(nfa: dict, filename: str):
+    with open(filename, "w") as file:
+        json.dump(nfa, file)
 
-def output(er: dict): 
-    # Avalia operadores, símbolos e epsilon
-    if 'op' in er:  # Avalia operações
-        op, op_priority = operadores[er['op']]
-        args_res = [output(a) for a in er['args']]
-        # Processa os argumentos com base na prioridade
-        processed_args = [a[0] if op_priority < a[1] else f'({a[0]})' for a in args_res]
-        return op(processed_args), op_priority
-
-    elif 'simb' in er:
-        return er['simb'], 3
-
-    elif 'epsilon' in er:
-        return 'ε', 3
-        
-
-    raise Exception("Formato de árvore de expressão regular inválido")
-
-def afnd_json(afnd, filename):
-    with open(filename, "w") as f:
-        json.dump(afnd, f, indent=4)
+def graphviz(nfa: dict):
+    dot = Digraph(comment='Automato Finito Nao Deterministico')
+    dot.node('start', shape='none', label='')
+    dot.edge('start', nfa["q0"], label='')
+    for state in nfa["delta"].keys():
+        if state in nfa["F"]:
+            dot.node(state, state, shape="doublecircle")
+        else:
+            dot.node(state, state, shape="circle")
+    for estado_inicial, transitions in nfa["delta"].items():
+        for simbolo, estados_finais in transitions.items():
+            for estado_final in estados_finais:  # handle the case where estado_final is a list
+                dot.edge(estado_inicial, estado_final, label = simbolo)
+    dot.render('automaton_graph_2', view=True, format='png')
