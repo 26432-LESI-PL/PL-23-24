@@ -1,6 +1,4 @@
-import json
 from graphviz import Digraph
-from collections import deque
 
 def graphviz(afnd: dict):
     dot = Digraph(comment="Automato Finito Não Deterministico")
