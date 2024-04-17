@@ -29,6 +29,8 @@ def main():
         parser.error("O argumento -r/--reconhecedor só pode ser usado com o argumento -d/--det")
     elif args.graphviz and not (args.det or args.ndet):
         parser.error("O argumento -g/--graphviz só pode ser usado com o argumento -d/--det ou -nd/--ndet")
+    elif args.output and not (args.er or args.ndet):
+        parser.error("O argumento -o/--output só pode ser usado com o argumento -er/--er ou -nd/--ndet")
 
     if args.det:
         print("Autómato finito determinístico")
@@ -36,24 +38,24 @@ def main():
             afd.reconhecedor(file, args.reconhecedor)
         if args.graphviz:
             afd.graphviz(file)
-        else:
-            print("Nenhuma ação especificada")
 
     if args.er:
         print("Expressão regular")
         if args.output:
-            pass
-            #er.output(file, args.output)
-        else:
-            print("Nenhuma ação especificada")
+            afnd_dict = er.to_afnd(file)
+            with open(args.output, "w", encoding="utf8") as f:
+                json.dump(afnd_dict, f, ensure_ascii=False, indent=4)
+                print("Ficheiro " + args.output + " criado com sucesso")
 
     if args.ndet:
         print("Autómato finito não determinístico")
         if args.graphviz:
             afnd.graphviz(file)
-        else:
-            print("Nenhuma ação especificada")
-    #print(f"Result: {result}")
+        if args.output:
+            afd_dict = afnd.to_afd(file)
+            with open(args.output, "w", encoding="utf8") as f:
+                json.dump(afd_dict, f, ensure_ascii=False, indent=4)
+                print("Ficheiro " + args.output + " criado com sucesso")
 
 if __name__ == "__main__":
     main()
