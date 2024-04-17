@@ -1,5 +1,6 @@
 import json
 from graphviz import Digraph
+from collections import deque
 
 def graphviz(afnd: dict):
     dot = Digraph(comment="Automato Finito Não Deterministico")
@@ -17,34 +18,144 @@ def graphviz(afnd: dict):
                 dot.edge(state, next_state, label=transition)
     dot.render("afnd_graph", view=True, format="png")
 
-def convert_to_afd(afnd):
-    afd = {
-        "Q": [],
-        "V": afnd["V"],
-        "delta": {},
-        "q0": [afnd["q0"]],
-        "F": []
+#Exemplo AFND/NFA
+'''{
+    "Q": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11"
+    ],
+    "V": [
+        "ε",
+        "b",
+        "a"
+    ],
+    "q0": "q1",
+    "F": [
+        "q2"
+    ],
+    "delta": {
+        "q3": {
+            "a": [
+                "q4"
+            ]
+        },
+        "q1": {
+            "ε": [
+                "q3",
+                "q5"
+            ]
+        },
+        "q4": {
+            "ε": [
+                "q2"
+            ]
+        },
+        "q6": {
+            "a": [
+                "q7"
+            ]
+        },
+        "q5": {
+            "ε": [
+                "q6"
+            ]
+        },
+        "q10": {
+            "b": [
+                "q11"
+            ]
+        },
+        "q8": {
+            "ε": [
+                "q10",
+                "q9"
+            ]
+        },
+        "q11": {
+            "ε": [
+                "q8",
+                "q9"
+            ]
+        },
+        "q7": {
+            "ε": [
+                "q8"
+            ]
+        },
+        "q9": {
+            "ε": [
+                "q2"
+            ]
+        }
     }
-    queue = [afd["q0"]]
-    while queue:
-        state = queue.pop(0)
-        afd["Q"].append(state)
-        afd["delta"][str(state)] = {}
-        for symbol in afd["V"]:
-            next_state = []
-            for substate in state:
-                if symbol in afnd["delta"].get(substate, {}):
-                    next_state += afnd["delta"][substate][symbol]
-            next_state = list(set(next_state))  # remove duplicates
-            if next_state and next_state not in afd["Q"]:
-                queue.append(next_state)
-            afd["delta"][str(state)][symbol] = next_state
-        if any(substate in afnd["F"] for substate in state):
-            afd["F"].append(state)
-    return afd
+}'''
 
-afd_dict: dict = {}
+#Exemplo AFD/DFA
+'''{
+    "Q": [
+        "A",
+        "B",
+        "C"
+    ],
+    "V": [
+        "b",
+        "a"
+    ],
+    "q0": "A",
+    "F": [
+        "C"
+    ],
+    "delta": {
+        "A": {
+            "a": "B"
+        },
+        "B": {
+            "b": "C"
+        },
+        "C": {
+            "b": "C"
+        }
+    }
+}'''
+def epsilon_closure(state, transition_function):
+    states = set(state)
+    for s in state:
+        states.update(transition_function.get(s, {}).get('ε', []))
+    return states
+
+def move(state, symbol, transition_function):
+    states = set()
+    for s in state:
+        states.update(transition_function.get(s, {}).get(symbol, []))
+    return states
+
+def nfa_to_dfa(nfa):
+    dfa = {"Q": [], "V": nfa["V"], "q0": nfa["q0"], "F": [], "delta": {}}
+    unmarked_states = [epsilon_closure([nfa["q0"]], nfa["delta"])]
+    while unmarked_states:
+        T = unmarked_states.pop()
+        dfa["Q"].append(''.join(sorted(T)))
+        if set(nfa["F"]).intersection(T):
+            dfa["F"].append(''.join(sorted(T)))
+        for symbol in nfa["V"]:
+            if symbol == 'ε':
+                continue
+            U = epsilon_closure(move(T, symbol, nfa["delta"]), nfa["delta"])
+            if U and ''.join(sorted(U)) not in dfa["Q"]:
+                unmarked_states.append(U)
+            dfa["delta"].setdefault(''.join(sorted(T)), {})[symbol] = ''.join(sorted(U))
+    return json.dumps(dfa, indent=4)
+
 with open("exemplos/afnd.json", "r", encoding="utf8") as file:
-    afd_dict = json.load(file)
-
-print(convert_to_afd(afd_dict))
+    afnd = json.load(file)
+    afd = nfa_to_dfa(afnd)
+    print(afd)

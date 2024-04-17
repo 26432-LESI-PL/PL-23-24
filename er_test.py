@@ -3,7 +3,7 @@ import er
 import os
 
 er_dict: dict = {}
-with open("exemplos/exemplo01.er.json", "r") as file:
+with open("exemplos/exemplo01.er.json", "r", encoding="utf8") as file:
     er_dict = json.load(file)
 
 def test_er_to_afnd():
