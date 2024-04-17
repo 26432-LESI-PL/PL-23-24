@@ -11,7 +11,7 @@ def test_afnd_graphviz():
     assert os.path.isfile("afnd_graph.png") == True, "Should be True"
 
 def test_convert_to_afd():
-    afd = afnd.convert_to_afd(afnd_dict)
+    afd = afnd.nfa_to_dfa(afnd_dict)
     with open("afd_output.json", "w", encoding="utf8") as file:
         json.dump(afd, file)
     assert os.path.isfile("afnd_graph.png"), "Should be True"
