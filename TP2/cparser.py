@@ -69,8 +69,6 @@ def p_expression_concat(t):
     add_code(f'strcpy(tmp_{length}, {t[1]});')
     add_code(f'strcat(tmp_{length}, {t[3]});')
     t[0] = f"tmp_{length}"
-    t[0] = f"{t[1]}{t[3]}"
-
 def p_expression_group(t):
     'expression : LPAREN expression RPAREN'
     t[0] = f"({t[2]})"
