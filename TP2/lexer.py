@@ -19,16 +19,16 @@ tokens = tokens + list(reserved.values())
 
 # Regular expression rules for simple tokens
 t_PLUS = r'\+'
-t_MINUS = r'\-'
+t_MINUS = r'-'
 t_TIMES = r'\*'
-t_DIVIDE = r'\/'
+t_DIVIDE = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_EQUALS = r'\='
-t_SEMICOLON = r'\;'
+t_EQUALS = r'='
+t_SEMICOLON = r';'
 t_CONCAT = r'\<\>'  # String concatenation operator
-t_COMMA = r'\,'
-t_COLON = r'\:'
+t_COMMA = r','
+t_COLON = r':'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 
@@ -67,7 +67,6 @@ t_ignore = ' \t'
 def t_error(t):
     print(f"Illegal character '{t.value[0]}'")
     t.lexer.skip(1)
-
 
 # Build the lexer
 lexer = lex.lex()
