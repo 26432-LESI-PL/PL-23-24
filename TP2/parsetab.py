@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEleftCONCATCOLON COMMA COMMENT CONCAT DIVIDE END EQUALS FUNC ID INPUT LBRACKET LPAREN MINUS NUMBER PLUS PRINT RANDOM RBRACKET RPAREN SEMICOLON STRING TIMESstatements : statements statement\n                  | statementstatement : ID EQUALS expression SEMICOLONstatement : PRINT LPAREN STRING RPAREN SEMICOLONstatement : expression SEMICOLONexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : expression CONCAT expressionexpression : LPAREN expression RPARENexpression : NUMBERexpression : ID'
+_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEleftCONCATCOLON COMMA COMMENT CONCAT DIVIDE END EQUALS FUNC ID INPUT LBRACKET LPAREN MINUS NUMBER PLUS PRINT RANDOM RBRACKET RPAREN SEMICOLON STRING TIMESstatements : statements statement\n                  | statementstatement : ID EQUALS expression SEMICOLONstatement : ID EQUALS STRING SEMICOLONstatement : PRINT LPAREN STRING RPAREN SEMICOLONstatement : PRINT LPAREN expression RPAREN SEMICOLONstatement : PRINT LPAREN expression CONCAT expression RPAREN SEMICOLONstatement : expression SEMICOLONexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : expression CONCAT expressionexpression : LPAREN expression RPARENexpression : NUMBERexpression : ID'
     
-_lr_action_items = {'ID':([0,1,2,6,8,9,10,11,12,13,14,15,27,29,],[3,3,-2,18,-1,18,-5,18,18,18,18,18,-3,-4,]),'PRINT':([0,1,2,8,10,27,29,],[5,5,-2,-1,-5,-3,-4,]),'LPAREN':([0,1,2,5,6,8,9,10,11,12,13,14,15,27,29,],[6,6,-2,16,6,-1,6,-5,6,6,6,6,6,-3,-4,]),'NUMBER':([0,1,2,6,8,9,10,11,12,13,14,15,27,29,],[7,7,-2,7,-1,7,-5,7,7,7,7,7,-3,-4,]),'$end':([1,2,8,10,27,29,],[0,-2,-1,-5,-3,-4,]),'EQUALS':([3,],[9,]),'SEMICOLON':([3,4,7,18,19,20,21,22,23,24,26,28,],[-13,10,-12,-13,27,-6,-7,-8,-9,-10,-11,29,]),'PLUS':([3,4,7,17,18,19,20,21,22,23,24,26,],[-13,11,-12,11,-13,11,-6,-7,-8,-9,-10,-11,]),'MINUS':([3,4,7,17,18,19,20,21,22,23,24,26,],[-13,12,-12,12,-13,12,-6,-7,-8,-9,-10,-11,]),'TIMES':([3,4,7,17,18,19,20,21,22,23,24,26,],[-13,13,-12,13,-13,13,13,13,-8,-9,-10,-11,]),'DIVIDE':([3,4,7,17,18,19,20,21,22,23,24,26,],[-13,14,-12,14,-13,14,14,14,-8,-9,-10,-11,]),'CONCAT':([3,4,7,17,18,19,20,21,22,23,24,26,],[-13,15,-12,15,-13,15,15,15,15,15,-10,-11,]),'RPAREN':([7,17,18,20,21,22,23,24,25,26,],[-12,26,-13,-6,-7,-8,-9,-10,28,-11,]),'STRING':([16,],[25,]),}
+_lr_action_items = {'ID':([0,1,2,6,8,9,10,11,12,13,14,15,16,29,30,33,34,35,38,],[3,3,-2,18,-1,18,-8,18,18,18,18,18,18,-3,-4,18,-5,-6,-7,]),'PRINT':([0,1,2,8,10,29,30,34,35,38,],[5,5,-2,-1,-8,-3,-4,-5,-6,-7,]),'LPAREN':([0,1,2,5,6,8,9,10,11,12,13,14,15,16,29,30,33,34,35,38,],[6,6,-2,16,6,-1,6,-8,6,6,6,6,6,6,-3,-4,6,-5,-6,-7,]),'NUMBER':([0,1,2,6,8,9,10,11,12,13,14,15,16,29,30,33,34,35,38,],[7,7,-2,7,-1,7,-8,7,7,7,7,7,7,-3,-4,7,-5,-6,-7,]),'$end':([1,2,8,10,29,30,34,35,38,],[0,-2,-1,-8,-3,-4,-5,-6,-7,]),'EQUALS':([3,],[9,]),'SEMICOLON':([3,4,7,18,19,20,21,22,23,24,25,28,31,32,37,],[-16,10,-15,-16,29,30,-9,-10,-11,-12,-13,-14,34,35,38,]),'PLUS':([3,4,7,17,18,19,21,22,23,24,25,27,28,36,],[-16,11,-15,11,-16,11,-9,-10,-11,-12,-13,11,-14,-13,]),'MINUS':([3,4,7,17,18,19,21,22,23,24,25,27,28,36,],[-16,12,-15,12,-16,12,-9,-10,-11,-12,-13,12,-14,-13,]),'TIMES':([3,4,7,17,18,19,21,22,23,24,25,27,28,36,],[-16,13,-15,13,-16,13,13,13,-11,-12,-13,13,-14,-13,]),'DIVIDE':([3,4,7,17,18,19,21,22,23,24,25,27,28,36,],[-16,14,-15,14,-16,14,14,14,-11,-12,-13,14,-14,-13,]),'CONCAT':([3,4,7,17,18,19,21,22,23,24,25,27,28,36,],[-16,15,-15,15,-16,15,15,15,15,15,-13,33,-14,-13,]),'RPAREN':([7,17,18,21,22,23,24,25,26,27,28,36,],[-15,28,-16,-9,-10,-11,-12,-13,31,32,-14,-13,]),'STRING':([9,16,],[20,26,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statements':([0,],[1,]),'statement':([0,1,],[2,8,]),'expression':([0,1,6,9,11,12,13,14,15,],[4,4,17,19,20,21,22,23,24,]),}
+_lr_goto_items = {'statements':([0,],[1,]),'statement':([0,1,],[2,8,]),'expression':([0,1,6,9,11,12,13,14,15,16,33,],[4,4,17,19,21,22,23,24,25,27,36,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,17 +27,20 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statements","S'",1,None,None,None),
-  ('statements -> statements statement','statements',2,'p_statements','main.py',15),
-  ('statements -> statement','statements',1,'p_statements','main.py',16),
-  ('statement -> ID EQUALS expression SEMICOLON','statement',4,'p_statement_assign','main.py',19),
-  ('statement -> PRINT LPAREN STRING RPAREN SEMICOLON','statement',5,'p_statement_print','main.py',22),
-  ('statement -> expression SEMICOLON','statement',2,'p_statement_expr','main.py',25),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','main.py',28),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','main.py',29),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','main.py',30),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','main.py',31),
-  ('expression -> expression CONCAT expression','expression',3,'p_expression_concat','main.py',41),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','main.py',44),
-  ('expression -> NUMBER','expression',1,'p_expression_number','main.py',47),
-  ('expression -> ID','expression',1,'p_expression_id','main.py',50),
+  ('statements -> statements statement','statements',2,'p_statements','cparser.py',17),
+  ('statements -> statement','statements',1,'p_statements','cparser.py',18),
+  ('statement -> ID EQUALS expression SEMICOLON','statement',4,'p_statement_assign','cparser.py',21),
+  ('statement -> ID EQUALS STRING SEMICOLON','statement',4,'p_statement_assign_string','cparser.py',26),
+  ('statement -> PRINT LPAREN STRING RPAREN SEMICOLON','statement',5,'p_statement_print_string','cparser.py',29),
+  ('statement -> PRINT LPAREN expression RPAREN SEMICOLON','statement',5,'p_statement_print_expr','cparser.py',32),
+  ('statement -> PRINT LPAREN expression CONCAT expression RPAREN SEMICOLON','statement',7,'p_statement_print_concat','cparser.py',34),
+  ('statement -> expression SEMICOLON','statement',2,'p_statement_expr','cparser.py',41),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','cparser.py',44),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','cparser.py',45),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','cparser.py',46),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','cparser.py',47),
+  ('expression -> expression CONCAT expression','expression',3,'p_expression_concat','cparser.py',57),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','cparser.py',60),
+  ('expression -> NUMBER','expression',1,'p_expression_number','cparser.py',63),
+  ('expression -> ID','expression',1,'p_expression_id','cparser.py',66),
 ]

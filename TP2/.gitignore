@@ -159,13 +159,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-automaton_graph
-automaton_graph.png
-afd_graph
-afd_graph.png
-afnd_graph
-afnd_graph.png
-er_nfa.json
-nfa.json
-afnd.json
-afd_output.json
+
+*.c
+*.out
+*.o
