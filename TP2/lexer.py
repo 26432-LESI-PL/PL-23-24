@@ -4,7 +4,7 @@ import ply.lex as lex
 tokens = [
     'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN',
     'ID', 'EQUALS', 'SEMICOLON', 'STRING', 'CONCAT', 'COMMENT',
-    'COMMA', 'COLON', 'LBRACKET', 'RBRACKET'
+    'COMMA', 'COLON', 'LBRACKET', 'RBRACKET', 'MULTILINE_COMMENT'
 ]
 
 # Reserved words
@@ -38,6 +38,10 @@ t_STRING = r'"(?:\\.|[^"\\])*"'  # Double-quoted strings with escaped characters
 # Comment handling
 def t_COMMENT(t):
     r'\-\-.*'
+    pass  # No return value. Token discarded.
+
+def t_MULTILINE_COMMENT(t):
+    r'\{-(.|\n)*?-\}'
     pass  # No return value. Token discarded.
 
 # A regular expression rule with some action code
