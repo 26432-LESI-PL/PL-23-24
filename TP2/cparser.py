@@ -43,9 +43,23 @@ def p_statement_print_expr(t):
     'statement : PRINT LPAREN expression RPAREN SEMICOLON'
     add_code(f'printf("%s", {t[3]});')
 
+# Generic expression statement
 def p_statement_expr(t):
     'statement : expression SEMICOLON'
-    add_code(f"{t[1]};")
+    # Do nothing, the expression will generate the code
+    #add_code(f"{t[1]};")
+
+def p_expression_input(t):
+    'expression : ID EQUALS INPUT LPAREN RPAREN'
+    add_code(f'char {t[1]}[100];')
+    add_code(f'gets({t[1]});')
+    t[0] = f'{t[1]}'
+
+def p_expression_random(t):
+    'expression : ID EQUALS RANDOM LPAREN expression RPAREN'
+    add_code(f'srand(time(NULL));')
+    add_code(f'int {t[1]} = rand() % ({t[5]} + 1);')
+    t[0] = f'{t[1]}'
 
 def p_expression_binop(t):
     '''expression : expression PLUS expression
@@ -83,7 +97,10 @@ def p_expression_number(t):
 
 def p_expression_id(t):
     'expression : ID'
-    t[0] = t[1]
+    if t[1] == 'tmp':
+        t[0] = f'tmp'
+    else:
+        t[0] = t[1]
 
 def p_error(t):
     if t:

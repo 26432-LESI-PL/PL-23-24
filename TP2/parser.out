@@ -7,10 +7,8 @@ Unused terminals:
     COMMENT
     END
     FUNC
-    INPUT
     LBRACKET
     MULTILINE_COMMENT
-    RANDOM
     RBRACKET
 
 Grammar
@@ -23,46 +21,48 @@ Rule 4     statement -> ID EQUALS STRING SEMICOLON
 Rule 5     statement -> PRINT LPAREN STRING RPAREN SEMICOLON
 Rule 6     statement -> PRINT LPAREN expression RPAREN SEMICOLON
 Rule 7     statement -> expression SEMICOLON
-Rule 8     expression -> expression PLUS expression
-Rule 9     expression -> expression MINUS expression
-Rule 10    expression -> expression TIMES expression
-Rule 11    expression -> expression DIVIDE expression
-Rule 12    expression -> expression CONCAT expression
-Rule 13    expression -> LPAREN expression RPAREN
-Rule 14    expression -> STRING
-Rule 15    expression -> NUMBER
-Rule 16    expression -> ID
+Rule 8     expression -> ID EQUALS INPUT LPAREN RPAREN
+Rule 9     expression -> ID EQUALS RANDOM LPAREN expression RPAREN
+Rule 10    expression -> expression PLUS expression
+Rule 11    expression -> expression MINUS expression
+Rule 12    expression -> expression TIMES expression
+Rule 13    expression -> expression DIVIDE expression
+Rule 14    expression -> expression CONCAT expression
+Rule 15    expression -> LPAREN expression RPAREN
+Rule 16    expression -> STRING
+Rule 17    expression -> NUMBER
+Rule 18    expression -> ID
 
 Terminals, with rules where they appear
 
 COLON                : 
 COMMA                : 
 COMMENT              : 
-CONCAT               : 12
-DIVIDE               : 11
+CONCAT               : 14
+DIVIDE               : 13
 END                  : 
-EQUALS               : 3 4
+EQUALS               : 3 4 8 9
 FUNC                 : 
-ID                   : 3 4 16
-INPUT                : 
+ID                   : 3 4 8 9 18
+INPUT                : 8
 LBRACKET             : 
-LPAREN               : 5 6 13
-MINUS                : 9
+LPAREN               : 5 6 8 9 15
+MINUS                : 11
 MULTILINE_COMMENT    : 
-NUMBER               : 15
-PLUS                 : 8
+NUMBER               : 17
+PLUS                 : 10
 PRINT                : 5 6
-RANDOM               : 
+RANDOM               : 9
 RBRACKET             : 
-RPAREN               : 5 6 13
+RPAREN               : 5 6 8 9 15
 SEMICOLON            : 3 4 5 6 7
-STRING               : 4 5 14
-TIMES                : 10
+STRING               : 4 5 16
+TIMES                : 12
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 3 6 7 8 8 9 9 10 10 11 11 12 12 13
+expression           : 3 6 7 9 10 10 11 11 12 12 13 13 14 14 15
 statement            : 1 2
 statements           : 1 0
 
@@ -78,15 +78,17 @@ state 0
     (5) statement -> . PRINT LPAREN STRING RPAREN SEMICOLON
     (6) statement -> . PRINT LPAREN expression RPAREN SEMICOLON
     (7) statement -> . expression SEMICOLON
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
     ID              shift and go to state 3
     PRINT           shift and go to state 6
@@ -107,15 +109,17 @@ state 1
     (5) statement -> . PRINT LPAREN STRING RPAREN SEMICOLON
     (6) statement -> . PRINT LPAREN expression RPAREN SEMICOLON
     (7) statement -> . expression SEMICOLON
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
     ID              shift and go to state 3
     PRINT           shift and go to state 6
@@ -142,25 +146,27 @@ state 3
 
     (3) statement -> ID . EQUALS expression SEMICOLON
     (4) statement -> ID . EQUALS STRING SEMICOLON
-    (16) expression -> ID .
+    (8) expression -> ID . EQUALS INPUT LPAREN RPAREN
+    (9) expression -> ID . EQUALS RANDOM LPAREN expression RPAREN
+    (18) expression -> ID .
 
     EQUALS          shift and go to state 10
-    SEMICOLON       reduce using rule 16 (expression -> ID .)
-    PLUS            reduce using rule 16 (expression -> ID .)
-    MINUS           reduce using rule 16 (expression -> ID .)
-    TIMES           reduce using rule 16 (expression -> ID .)
-    DIVIDE          reduce using rule 16 (expression -> ID .)
-    CONCAT          reduce using rule 16 (expression -> ID .)
+    SEMICOLON       reduce using rule 18 (expression -> ID .)
+    PLUS            reduce using rule 18 (expression -> ID .)
+    MINUS           reduce using rule 18 (expression -> ID .)
+    TIMES           reduce using rule 18 (expression -> ID .)
+    DIVIDE          reduce using rule 18 (expression -> ID .)
+    CONCAT          reduce using rule 18 (expression -> ID .)
 
 
 state 4
 
     (7) statement -> expression . SEMICOLON
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
 
     SEMICOLON       shift and go to state 11
     PLUS            shift and go to state 12
@@ -172,15 +178,15 @@ state 4
 
 state 5
 
-    (14) expression -> STRING .
+    (16) expression -> STRING .
 
-    SEMICOLON       reduce using rule 14 (expression -> STRING .)
-    PLUS            reduce using rule 14 (expression -> STRING .)
-    MINUS           reduce using rule 14 (expression -> STRING .)
-    TIMES           reduce using rule 14 (expression -> STRING .)
-    DIVIDE          reduce using rule 14 (expression -> STRING .)
-    CONCAT          reduce using rule 14 (expression -> STRING .)
-    RPAREN          reduce using rule 14 (expression -> STRING .)
+    SEMICOLON       reduce using rule 16 (expression -> STRING .)
+    PLUS            reduce using rule 16 (expression -> STRING .)
+    MINUS           reduce using rule 16 (expression -> STRING .)
+    TIMES           reduce using rule 16 (expression -> STRING .)
+    DIVIDE          reduce using rule 16 (expression -> STRING .)
+    CONCAT          reduce using rule 16 (expression -> STRING .)
+    RPAREN          reduce using rule 16 (expression -> STRING .)
 
 
 state 6
@@ -193,35 +199,37 @@ state 6
 
 state 7
 
-    (13) expression -> LPAREN . expression RPAREN
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
+    (15) expression -> LPAREN . expression RPAREN
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
+    ID              shift and go to state 19
     LPAREN          shift and go to state 7
     STRING          shift and go to state 5
     NUMBER          shift and go to state 8
-    ID              shift and go to state 19
 
     expression                     shift and go to state 18
 
 state 8
 
-    (15) expression -> NUMBER .
+    (17) expression -> NUMBER .
 
-    SEMICOLON       reduce using rule 15 (expression -> NUMBER .)
-    PLUS            reduce using rule 15 (expression -> NUMBER .)
-    MINUS           reduce using rule 15 (expression -> NUMBER .)
-    TIMES           reduce using rule 15 (expression -> NUMBER .)
-    DIVIDE          reduce using rule 15 (expression -> NUMBER .)
-    CONCAT          reduce using rule 15 (expression -> NUMBER .)
-    RPAREN          reduce using rule 15 (expression -> NUMBER .)
+    SEMICOLON       reduce using rule 17 (expression -> NUMBER .)
+    PLUS            reduce using rule 17 (expression -> NUMBER .)
+    MINUS           reduce using rule 17 (expression -> NUMBER .)
+    TIMES           reduce using rule 17 (expression -> NUMBER .)
+    DIVIDE          reduce using rule 17 (expression -> NUMBER .)
+    CONCAT          reduce using rule 17 (expression -> NUMBER .)
+    RPAREN          reduce using rule 17 (expression -> NUMBER .)
 
 
 state 9
@@ -240,20 +248,26 @@ state 10
 
     (3) statement -> ID EQUALS . expression SEMICOLON
     (4) statement -> ID EQUALS . STRING SEMICOLON
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
+    (8) expression -> ID EQUALS . INPUT LPAREN RPAREN
+    (9) expression -> ID EQUALS . RANDOM LPAREN expression RPAREN
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
     STRING          shift and go to state 21
+    INPUT           shift and go to state 22
+    RANDOM          shift and go to state 23
+    ID              shift and go to state 19
     LPAREN          shift and go to state 7
     NUMBER          shift and go to state 8
-    ID              shift and go to state 19
 
     expression                     shift and go to state 20
 
@@ -271,135 +285,147 @@ state 11
 
 state 12
 
-    (8) expression -> expression PLUS . expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
+    (10) expression -> expression PLUS . expression
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
+    ID              shift and go to state 19
     LPAREN          shift and go to state 7
     STRING          shift and go to state 5
     NUMBER          shift and go to state 8
-    ID              shift and go to state 19
-
-    expression                     shift and go to state 22
-
-state 13
-
-    (9) expression -> expression MINUS . expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
-
-    LPAREN          shift and go to state 7
-    STRING          shift and go to state 5
-    NUMBER          shift and go to state 8
-    ID              shift and go to state 19
-
-    expression                     shift and go to state 23
-
-state 14
-
-    (10) expression -> expression TIMES . expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
-
-    LPAREN          shift and go to state 7
-    STRING          shift and go to state 5
-    NUMBER          shift and go to state 8
-    ID              shift and go to state 19
 
     expression                     shift and go to state 24
 
-state 15
+state 13
 
-    (11) expression -> expression DIVIDE . expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
+    (11) expression -> expression MINUS . expression
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
+    ID              shift and go to state 19
     LPAREN          shift and go to state 7
     STRING          shift and go to state 5
     NUMBER          shift and go to state 8
-    ID              shift and go to state 19
 
     expression                     shift and go to state 25
 
-state 16
+state 14
 
-    (12) expression -> expression CONCAT . expression
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
+    (12) expression -> expression TIMES . expression
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
+    ID              shift and go to state 19
     LPAREN          shift and go to state 7
     STRING          shift and go to state 5
     NUMBER          shift and go to state 8
-    ID              shift and go to state 19
 
     expression                     shift and go to state 26
+
+state 15
+
+    (13) expression -> expression DIVIDE . expression
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    ID              shift and go to state 19
+    LPAREN          shift and go to state 7
+    STRING          shift and go to state 5
+    NUMBER          shift and go to state 8
+
+    expression                     shift and go to state 27
+
+state 16
+
+    (14) expression -> expression CONCAT . expression
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    ID              shift and go to state 19
+    LPAREN          shift and go to state 7
+    STRING          shift and go to state 5
+    NUMBER          shift and go to state 8
+
+    expression                     shift and go to state 28
 
 state 17
 
     (5) statement -> PRINT LPAREN . STRING RPAREN SEMICOLON
     (6) statement -> PRINT LPAREN . expression RPAREN SEMICOLON
-    (8) expression -> . expression PLUS expression
-    (9) expression -> . expression MINUS expression
-    (10) expression -> . expression TIMES expression
-    (11) expression -> . expression DIVIDE expression
-    (12) expression -> . expression CONCAT expression
-    (13) expression -> . LPAREN expression RPAREN
-    (14) expression -> . STRING
-    (15) expression -> . NUMBER
-    (16) expression -> . ID
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
-    STRING          shift and go to state 27
+    STRING          shift and go to state 29
+    ID              shift and go to state 19
     LPAREN          shift and go to state 7
     NUMBER          shift and go to state 8
-    ID              shift and go to state 19
 
-    expression                     shift and go to state 28
+    expression                     shift and go to state 30
 
 state 18
 
-    (13) expression -> LPAREN expression . RPAREN
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (15) expression -> LPAREN expression . RPAREN
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
 
-    RPAREN          shift and go to state 29
+    RPAREN          shift and go to state 31
     PLUS            shift and go to state 12
     MINUS           shift and go to state 13
     TIMES           shift and go to state 14
@@ -409,27 +435,30 @@ state 18
 
 state 19
 
-    (16) expression -> ID .
+    (8) expression -> ID . EQUALS INPUT LPAREN RPAREN
+    (9) expression -> ID . EQUALS RANDOM LPAREN expression RPAREN
+    (18) expression -> ID .
 
-    RPAREN          reduce using rule 16 (expression -> ID .)
-    PLUS            reduce using rule 16 (expression -> ID .)
-    MINUS           reduce using rule 16 (expression -> ID .)
-    TIMES           reduce using rule 16 (expression -> ID .)
-    DIVIDE          reduce using rule 16 (expression -> ID .)
-    CONCAT          reduce using rule 16 (expression -> ID .)
-    SEMICOLON       reduce using rule 16 (expression -> ID .)
+    EQUALS          shift and go to state 32
+    RPAREN          reduce using rule 18 (expression -> ID .)
+    PLUS            reduce using rule 18 (expression -> ID .)
+    MINUS           reduce using rule 18 (expression -> ID .)
+    TIMES           reduce using rule 18 (expression -> ID .)
+    DIVIDE          reduce using rule 18 (expression -> ID .)
+    CONCAT          reduce using rule 18 (expression -> ID .)
+    SEMICOLON       reduce using rule 18 (expression -> ID .)
 
 
 state 20
 
     (3) statement -> ID EQUALS expression . SEMICOLON
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
 
-    SEMICOLON       shift and go to state 30
+    SEMICOLON       shift and go to state 33
     PLUS            shift and go to state 12
     MINUS           shift and go to state 13
     TIMES           shift and go to state 14
@@ -440,131 +469,145 @@ state 20
 state 21
 
     (4) statement -> ID EQUALS STRING . SEMICOLON
-    (14) expression -> STRING .
+    (16) expression -> STRING .
 
   ! shift/reduce conflict for SEMICOLON resolved as shift
-    SEMICOLON       shift and go to state 31
-    PLUS            reduce using rule 14 (expression -> STRING .)
-    MINUS           reduce using rule 14 (expression -> STRING .)
-    TIMES           reduce using rule 14 (expression -> STRING .)
-    DIVIDE          reduce using rule 14 (expression -> STRING .)
-    CONCAT          reduce using rule 14 (expression -> STRING .)
+    SEMICOLON       shift and go to state 34
+    PLUS            reduce using rule 16 (expression -> STRING .)
+    MINUS           reduce using rule 16 (expression -> STRING .)
+    TIMES           reduce using rule 16 (expression -> STRING .)
+    DIVIDE          reduce using rule 16 (expression -> STRING .)
+    CONCAT          reduce using rule 16 (expression -> STRING .)
 
-  ! SEMICOLON       [ reduce using rule 14 (expression -> STRING .) ]
+  ! SEMICOLON       [ reduce using rule 16 (expression -> STRING .) ]
 
 
 state 22
 
-    (8) expression -> expression PLUS expression .
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (8) expression -> ID EQUALS INPUT . LPAREN RPAREN
 
-    SEMICOLON       reduce using rule 8 (expression -> expression PLUS expression .)
-    PLUS            reduce using rule 8 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 8 (expression -> expression PLUS expression .)
-    RPAREN          reduce using rule 8 (expression -> expression PLUS expression .)
-    TIMES           shift and go to state 14
-    DIVIDE          shift and go to state 15
-    CONCAT          shift and go to state 16
-
-  ! TIMES           [ reduce using rule 8 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 8 (expression -> expression PLUS expression .) ]
-  ! CONCAT          [ reduce using rule 8 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 12 ]
-  ! MINUS           [ shift and go to state 13 ]
+    LPAREN          shift and go to state 35
 
 
 state 23
 
-    (9) expression -> expression MINUS expression .
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (9) expression -> ID EQUALS RANDOM . LPAREN expression RPAREN
 
-    SEMICOLON       reduce using rule 9 (expression -> expression MINUS expression .)
-    PLUS            reduce using rule 9 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 9 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 9 (expression -> expression MINUS expression .)
-    TIMES           shift and go to state 14
-    DIVIDE          shift and go to state 15
-    CONCAT          shift and go to state 16
-
-  ! TIMES           [ reduce using rule 9 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 9 (expression -> expression MINUS expression .) ]
-  ! CONCAT          [ reduce using rule 9 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 12 ]
-  ! MINUS           [ shift and go to state 13 ]
+    LPAREN          shift and go to state 36
 
 
 state 24
 
-    (10) expression -> expression TIMES expression .
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (10) expression -> expression PLUS expression .
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
 
-    SEMICOLON       reduce using rule 10 (expression -> expression TIMES expression .)
-    PLUS            reduce using rule 10 (expression -> expression TIMES expression .)
-    MINUS           reduce using rule 10 (expression -> expression TIMES expression .)
-    TIMES           reduce using rule 10 (expression -> expression TIMES expression .)
-    DIVIDE          reduce using rule 10 (expression -> expression TIMES expression .)
-    RPAREN          reduce using rule 10 (expression -> expression TIMES expression .)
+    SEMICOLON       reduce using rule 10 (expression -> expression PLUS expression .)
+    PLUS            reduce using rule 10 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 10 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 10 (expression -> expression PLUS expression .)
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 15
     CONCAT          shift and go to state 16
 
-  ! CONCAT          [ reduce using rule 10 (expression -> expression TIMES expression .) ]
+  ! TIMES           [ reduce using rule 10 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 10 (expression -> expression PLUS expression .) ]
+  ! CONCAT          [ reduce using rule 10 (expression -> expression PLUS expression .) ]
   ! PLUS            [ shift and go to state 12 ]
   ! MINUS           [ shift and go to state 13 ]
-  ! TIMES           [ shift and go to state 14 ]
-  ! DIVIDE          [ shift and go to state 15 ]
 
 
 state 25
 
-    (11) expression -> expression DIVIDE expression .
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (11) expression -> expression MINUS expression .
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
 
-    SEMICOLON       reduce using rule 11 (expression -> expression DIVIDE expression .)
-    PLUS            reduce using rule 11 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 11 (expression -> expression DIVIDE expression .)
-    TIMES           reduce using rule 11 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 11 (expression -> expression DIVIDE expression .)
-    RPAREN          reduce using rule 11 (expression -> expression DIVIDE expression .)
+    SEMICOLON       reduce using rule 11 (expression -> expression MINUS expression .)
+    PLUS            reduce using rule 11 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 11 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 11 (expression -> expression MINUS expression .)
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 15
     CONCAT          shift and go to state 16
 
-  ! CONCAT          [ reduce using rule 11 (expression -> expression DIVIDE expression .) ]
+  ! TIMES           [ reduce using rule 11 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 11 (expression -> expression MINUS expression .) ]
+  ! CONCAT          [ reduce using rule 11 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 12 ]
+  ! MINUS           [ shift and go to state 13 ]
+
+
+state 26
+
+    (12) expression -> expression TIMES expression .
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
+
+    SEMICOLON       reduce using rule 12 (expression -> expression TIMES expression .)
+    PLUS            reduce using rule 12 (expression -> expression TIMES expression .)
+    MINUS           reduce using rule 12 (expression -> expression TIMES expression .)
+    TIMES           reduce using rule 12 (expression -> expression TIMES expression .)
+    DIVIDE          reduce using rule 12 (expression -> expression TIMES expression .)
+    RPAREN          reduce using rule 12 (expression -> expression TIMES expression .)
+    CONCAT          shift and go to state 16
+
+  ! CONCAT          [ reduce using rule 12 (expression -> expression TIMES expression .) ]
   ! PLUS            [ shift and go to state 12 ]
   ! MINUS           [ shift and go to state 13 ]
   ! TIMES           [ shift and go to state 14 ]
   ! DIVIDE          [ shift and go to state 15 ]
 
 
-state 26
+state 27
 
-    (12) expression -> expression CONCAT expression .
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (13) expression -> expression DIVIDE expression .
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
 
-    SEMICOLON       reduce using rule 12 (expression -> expression CONCAT expression .)
-    PLUS            reduce using rule 12 (expression -> expression CONCAT expression .)
-    MINUS           reduce using rule 12 (expression -> expression CONCAT expression .)
-    TIMES           reduce using rule 12 (expression -> expression CONCAT expression .)
-    DIVIDE          reduce using rule 12 (expression -> expression CONCAT expression .)
-    CONCAT          reduce using rule 12 (expression -> expression CONCAT expression .)
-    RPAREN          reduce using rule 12 (expression -> expression CONCAT expression .)
+    SEMICOLON       reduce using rule 13 (expression -> expression DIVIDE expression .)
+    PLUS            reduce using rule 13 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 13 (expression -> expression DIVIDE expression .)
+    TIMES           reduce using rule 13 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 13 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 13 (expression -> expression DIVIDE expression .)
+    CONCAT          shift and go to state 16
+
+  ! CONCAT          [ reduce using rule 13 (expression -> expression DIVIDE expression .) ]
+  ! PLUS            [ shift and go to state 12 ]
+  ! MINUS           [ shift and go to state 13 ]
+  ! TIMES           [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 15 ]
+
+
+state 28
+
+    (14) expression -> expression CONCAT expression .
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
+
+    SEMICOLON       reduce using rule 14 (expression -> expression CONCAT expression .)
+    PLUS            reduce using rule 14 (expression -> expression CONCAT expression .)
+    MINUS           reduce using rule 14 (expression -> expression CONCAT expression .)
+    TIMES           reduce using rule 14 (expression -> expression CONCAT expression .)
+    DIVIDE          reduce using rule 14 (expression -> expression CONCAT expression .)
+    CONCAT          reduce using rule 14 (expression -> expression CONCAT expression .)
+    RPAREN          reduce using rule 14 (expression -> expression CONCAT expression .)
 
   ! PLUS            [ shift and go to state 12 ]
   ! MINUS           [ shift and go to state 13 ]
@@ -573,32 +616,32 @@ state 26
   ! CONCAT          [ shift and go to state 16 ]
 
 
-state 27
+state 29
 
     (5) statement -> PRINT LPAREN STRING . RPAREN SEMICOLON
-    (14) expression -> STRING .
+    (16) expression -> STRING .
 
   ! shift/reduce conflict for RPAREN resolved as shift
-    RPAREN          shift and go to state 32
-    PLUS            reduce using rule 14 (expression -> STRING .)
-    MINUS           reduce using rule 14 (expression -> STRING .)
-    TIMES           reduce using rule 14 (expression -> STRING .)
-    DIVIDE          reduce using rule 14 (expression -> STRING .)
-    CONCAT          reduce using rule 14 (expression -> STRING .)
+    RPAREN          shift and go to state 37
+    PLUS            reduce using rule 16 (expression -> STRING .)
+    MINUS           reduce using rule 16 (expression -> STRING .)
+    TIMES           reduce using rule 16 (expression -> STRING .)
+    DIVIDE          reduce using rule 16 (expression -> STRING .)
+    CONCAT          reduce using rule 16 (expression -> STRING .)
 
-  ! RPAREN          [ reduce using rule 14 (expression -> STRING .) ]
+  ! RPAREN          [ reduce using rule 16 (expression -> STRING .) ]
 
 
-state 28
+state 30
 
     (6) statement -> PRINT LPAREN expression . RPAREN SEMICOLON
-    (8) expression -> expression . PLUS expression
-    (9) expression -> expression . MINUS expression
-    (10) expression -> expression . TIMES expression
-    (11) expression -> expression . DIVIDE expression
-    (12) expression -> expression . CONCAT expression
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
 
-    RPAREN          shift and go to state 33
+    RPAREN          shift and go to state 38
     PLUS            shift and go to state 12
     MINUS           shift and go to state 13
     TIMES           shift and go to state 14
@@ -606,20 +649,29 @@ state 28
     CONCAT          shift and go to state 16
 
 
-state 29
+state 31
 
-    (13) expression -> LPAREN expression RPAREN .
+    (15) expression -> LPAREN expression RPAREN .
 
-    SEMICOLON       reduce using rule 13 (expression -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 13 (expression -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 13 (expression -> LPAREN expression RPAREN .)
-    TIMES           reduce using rule 13 (expression -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 13 (expression -> LPAREN expression RPAREN .)
-    CONCAT          reduce using rule 13 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 13 (expression -> LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 15 (expression -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 15 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 15 (expression -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 15 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 15 (expression -> LPAREN expression RPAREN .)
+    CONCAT          reduce using rule 15 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 15 (expression -> LPAREN expression RPAREN .)
 
 
-state 30
+state 32
+
+    (8) expression -> ID EQUALS . INPUT LPAREN RPAREN
+    (9) expression -> ID EQUALS . RANDOM LPAREN expression RPAREN
+
+    INPUT           shift and go to state 22
+    RANDOM          shift and go to state 23
+
+
+state 33
 
     (3) statement -> ID EQUALS expression SEMICOLON .
 
@@ -631,7 +683,7 @@ state 30
     $end            reduce using rule 3 (statement -> ID EQUALS expression SEMICOLON .)
 
 
-state 31
+state 34
 
     (4) statement -> ID EQUALS STRING SEMICOLON .
 
@@ -643,21 +695,80 @@ state 31
     $end            reduce using rule 4 (statement -> ID EQUALS STRING SEMICOLON .)
 
 
-state 32
+state 35
+
+    (8) expression -> ID EQUALS INPUT LPAREN . RPAREN
+
+    RPAREN          shift and go to state 39
+
+
+state 36
+
+    (9) expression -> ID EQUALS RANDOM LPAREN . expression RPAREN
+    (8) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (9) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (10) expression -> . expression PLUS expression
+    (11) expression -> . expression MINUS expression
+    (12) expression -> . expression TIMES expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression CONCAT expression
+    (15) expression -> . LPAREN expression RPAREN
+    (16) expression -> . STRING
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    ID              shift and go to state 19
+    LPAREN          shift and go to state 7
+    STRING          shift and go to state 5
+    NUMBER          shift and go to state 8
+
+    expression                     shift and go to state 40
+
+state 37
 
     (5) statement -> PRINT LPAREN STRING RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 34
+    SEMICOLON       shift and go to state 41
 
 
-state 33
+state 38
 
     (6) statement -> PRINT LPAREN expression RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 35
+    SEMICOLON       shift and go to state 42
 
 
-state 34
+state 39
+
+    (8) expression -> ID EQUALS INPUT LPAREN RPAREN .
+
+    SEMICOLON       reduce using rule 8 (expression -> ID EQUALS INPUT LPAREN RPAREN .)
+    PLUS            reduce using rule 8 (expression -> ID EQUALS INPUT LPAREN RPAREN .)
+    MINUS           reduce using rule 8 (expression -> ID EQUALS INPUT LPAREN RPAREN .)
+    TIMES           reduce using rule 8 (expression -> ID EQUALS INPUT LPAREN RPAREN .)
+    DIVIDE          reduce using rule 8 (expression -> ID EQUALS INPUT LPAREN RPAREN .)
+    CONCAT          reduce using rule 8 (expression -> ID EQUALS INPUT LPAREN RPAREN .)
+    RPAREN          reduce using rule 8 (expression -> ID EQUALS INPUT LPAREN RPAREN .)
+
+
+state 40
+
+    (9) expression -> ID EQUALS RANDOM LPAREN expression . RPAREN
+    (10) expression -> expression . PLUS expression
+    (11) expression -> expression . MINUS expression
+    (12) expression -> expression . TIMES expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . CONCAT expression
+
+    RPAREN          shift and go to state 43
+    PLUS            shift and go to state 12
+    MINUS           shift and go to state 13
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 15
+    CONCAT          shift and go to state 16
+
+
+state 41
 
     (5) statement -> PRINT LPAREN STRING RPAREN SEMICOLON .
 
@@ -669,7 +780,7 @@ state 34
     $end            reduce using rule 5 (statement -> PRINT LPAREN STRING RPAREN SEMICOLON .)
 
 
-state 35
+state 42
 
     (6) statement -> PRINT LPAREN expression RPAREN SEMICOLON .
 
@@ -680,8 +791,21 @@ state 35
     NUMBER          reduce using rule 6 (statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
     $end            reduce using rule 6 (statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
 
+
+state 43
+
+    (9) expression -> ID EQUALS RANDOM LPAREN expression RPAREN .
+
+    SEMICOLON       reduce using rule 9 (expression -> ID EQUALS RANDOM LPAREN expression RPAREN .)
+    PLUS            reduce using rule 9 (expression -> ID EQUALS RANDOM LPAREN expression RPAREN .)
+    MINUS           reduce using rule 9 (expression -> ID EQUALS RANDOM LPAREN expression RPAREN .)
+    TIMES           reduce using rule 9 (expression -> ID EQUALS RANDOM LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 9 (expression -> ID EQUALS RANDOM LPAREN expression RPAREN .)
+    CONCAT          reduce using rule 9 (expression -> ID EQUALS RANDOM LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 9 (expression -> ID EQUALS RANDOM LPAREN expression RPAREN .)
+
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
 WARNING: shift/reduce conflict for SEMICOLON in state 21 resolved as shift
-WARNING: shift/reduce conflict for RPAREN in state 27 resolved as shift
+WARNING: shift/reduce conflict for RPAREN in state 29 resolved as shift
