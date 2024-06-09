@@ -25,7 +25,15 @@ else:
         if not line:
             break
 
-c_code = cparser.parse(data)
+python, c_code = cparser.parse(data)
+# Print the generated Python code
+print("Código Python gerado:")
+print("\n".join(python))
+
+print("Resultado da execução do código Python:")
+print(exec("\n".join(python)))
+print("----------------------------------------")
+
 # Print the generated C code
 print("Código C gerado:")
 print("\n".join(c_code))
