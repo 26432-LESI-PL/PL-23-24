@@ -57,15 +57,17 @@ def p_statement_print_string(t):
         parts = t[3].split('#')
         # get the variable names in between #{}
         vars = [part[part.find('{') + 1:part.find('}')] for part in parts if '{' in part]
+        python_tmp = t[3]
+        python_tmp = python_tmp.replace('#{', '{').replace('}', '}')
+        add_python_code(f'print(f{python_tmp})')
         # Replace the #{} with %s
         for var in vars:
             t[3] = t[3].replace(f'#{{{var}}}', '%s')
         # Add the printf statement with the variables
         add_c_code(f'printf({t[3]}, {", ".join(vars)});')
-        add_python_code(f'print({t[3].replace("%", "%%")})')
     else:
         add_c_code(f'printf({t[3].replace("%", "%%")});')
-        add_python_code(f'print({t[3].replace("%", "%%")})')
+        add_python_code(f'print({t[3]})')
 
 def p_statement_print_expr(t):
     'statement : PRINT LPAREN expression RPAREN SEMICOLON'
