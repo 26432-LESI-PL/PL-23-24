@@ -13,7 +13,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    continue-on-error: true
     defaults:
       run:
         working-directory: ./TP2
@@ -28,38 +27,50 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Exemplo A 01
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-A-01.fca
     - name: Exemplo B 01
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-B-01.fca
     - name: Exemplo B 02
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-B-02.fca
     #- name: Exemplo B 03
+    #  if: always()
     #  run: |
     #    python3 main.py --input exemplos/exemplo-B-03.fca
     - name: Exemplo C 01
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-C-01.fca
     - name: Exemplo C 02
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-C-02.fca
     - name: Exemplo C 03
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-C-03.fca
     - name: Exemplo C 04
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-C-04.fca
     - name: Exemplo D 01
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-D-01.fca
     - name: Exemplo D 02
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-D-02.fca
     - name: Exemplo D 02b
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-D-02b.fca
     - name: Exemplo D 03
+      if: always()
       run: |
         python3 main.py --input exemplos/exemplo-D-03.fca
