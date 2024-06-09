@@ -35,22 +35,18 @@ def p_statement_assign_string(t):
 
 def p_statement_print_string(t):
     'statement : PRINT LPAREN STRING RPAREN SEMICOLON'
+    # Check if the string contains variables in between #{}
     if '#{' in t[3]:
         # Example: ESCREVER("Olá #{teste}! Como estás #{nome}?")
         # Result: printf("Olá %s! Como estás %s?", teste, nome);
-        # Replace the #{} with %s and add the variables
         parts = t[3].split('#')
         # get the variable names in between #{}
         vars = [part[part.find('{') + 1:part.find('}')] for part in parts if '{' in part]
         # Replace the #{} with %s
-        print(t[3])
         for var in vars:
             t[3] = t[3].replace(f'#{{{var}}}', '%s')
         # Add the printf statement with the variables
         add_code(f'printf({t[3]}, {", ".join(vars)});')
-
-
-        print(f'parts: {vars}')
     else:
         add_code(f'printf("{t[3].replace("%", "%%")}");')
 
