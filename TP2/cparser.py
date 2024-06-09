@@ -24,6 +24,7 @@ def add_c_code(line):
 def add_python_code(line):
     python_code.append(line)
 
+# Statements and expressions rules
 def p_statements(t):
     '''statements : statements statement
                   | statement'''
@@ -34,13 +35,9 @@ def p_statements(t):
 
 def p_statement_assign(t):
     'statement : ID EQUALS expression SEMICOLON'
-    # Removes the last character if it is a question mark or exclamation mark
-    # This is to avoid conflicts with the C syntax
-    if t[1].endswith('?') or t[1].endswith('!'):
-        t[1] = t[1][:-1]
     add_c_code(f"int {t[1]} = {t[3]};")
     add_python_code(f"{t[1]} = {t[3]}")
-    t[0] = f"int {t[1]} = {t[3]};"
+    t[0] = f"{t[1]} = {t[3]}"
 
 def p_statement_assign_string(t):
     'statement : ID EQUALS STRING SEMICOLON'
@@ -82,20 +79,14 @@ def p_statement_print_list(t):
 
 def p_statement_print_string(t):
     'statement : PRINT LPAREN STRING RPAREN SEMICOLON'
-    # Check if the string contains variables in between #{}
     if '#{' in t[3]:
-        # Example: ESCREVER("Olá #{teste}! Como estás #{nome}?")
-        # Result: printf("Olá %s! Como estás %s?", teste, nome);
         parts = t[3].split('#')
-        # get the variable names in between #{}
         vars = [part[part.find('{') + 1:part.find('}')] for part in parts if '{' in part]
         python_tmp = t[3]
         python_tmp = python_tmp.replace('#{', '{').replace('}', '}')
         add_python_code(f'print(f{python_tmp})')
-        # Replace the #{} with %s
         for var in vars:
             t[3] = t[3].replace(f'#{{{var}}}', '%s')
-        # Add the printf statement with the variables
         add_c_code(f'printf({t[3]}, {", ".join(vars)});')
     else:
         add_c_code(f'printf({t[3].replace("%", "%%")});')
@@ -103,42 +94,43 @@ def p_statement_print_string(t):
 
 def p_statement_print_expr(t):
     'statement : PRINT LPAREN expression RPAREN SEMICOLON'
-    add_c_code(f'printf("%s", {t[3]});')
+    add_c_code(f'printf("%d", {t[3]});')
     add_python_code(f'print({t[3]})')
 
-# Generic expression statement
 def p_statement_expr(t):
     'statement : expression SEMICOLON'
-    # Do nothing, the expression will generate the code
-    #add_c_code(f"{t[1]};")
 
 def p_statement_function_oneliner_declaration(t):
     '''statement : FUNCTION ID LPAREN param_list RPAREN COMMA COLON expression SEMICOLON
                  | FUNCTION ID LPAREN RPAREN COMMA COLON expression SEMICOLON'''
-    if len(t) == 10:  # If the function has parameters and a return expression
+    if len(t) == 10:
         params = ', '.join([f'int {param}' for param in t[4]])
         add_c_code(f'int {t[2]}({params}) {{ return {t[8]}; }}')
         add_python_code(f'def {t[2]}({", ".join(t[4])}): return {t[8]}')
-    else:  # If the function has parameters but no return expression
-        add_c_code(f'int {t[2]}() {{ return {t[6]}; }}')
-        add_python_code(f'def {t[2]}(): return {t[6]}')
+    else:
+        add_c_code(f'int {t[2]}() {{ return {t[7]}; }}')
+        add_python_code(f'def {t[2]}(): return {t[7]}')
 
 def p_statement_function_declaration(t):
     '''statement : FUNCTION ID LPAREN param_list RPAREN COLON statements END
                  | FUNCTION ID LPAREN RPAREN COLON statements END'''
-    if len(t) == 8:  # If the function has parameters
+    if len(t) == 9:
         params = ', '.join([f'int {param}' for param in t[4]])
-        add_c_code(f'void {t[2]}({params}) {{')
+        add_c_code(f'int {t[2]}({params}) {{')
+        for stmt in t[7]:
+            add_c_code(stmt)
+        add_c_code('}')
+        add_python_code(f'def {t[2]}({", ".join(t[4])}):')
+        for stmt in t[7]:
+            add_python_code(f'    {stmt}')
+    else:
+        add_c_code(f'int {t[2]}() {{')
         for stmt in t[6]:
             add_c_code(stmt)
         add_c_code('}')
-        add_python_code(f'def {t[2]}({", ".join(t[4])}):\n    ' + '\n    '.join(t[6]))
-    else:  # If the function has no parameters
-        add_c_code(f'void {t[2]}() {{')
+        add_python_code(f'def {t[2]}():')
         for stmt in t[6]:
-            add_c_code(stmt)
-        add_c_code('}')
-        add_python_code(f'def {t[2]}():\n    ' + '\n    '.join(t[6]))
+            add_python_code(f'    {stmt}')
 
 def p_param_list(t):
     '''param_list : param_list COMMA ID
@@ -154,19 +146,16 @@ def p_statement_end(t):
     add_python_code('')
 
 def p_expression_input(t):
-    'expression : ID EQUALS INPUT LPAREN RPAREN'
-    add_c_code(f'char {t[1]}[100];')
+    'expression : INPUT LPAREN RPAREN'
+    t[0] = 'input()'
     add_c_code(f'gets({t[1]});')
     add_python_code(f'{t[1]} = input()')
-    t[0] = f'{t[1]}'
 
 def p_expression_random(t):
-    'expression : ID EQUALS RANDOM LPAREN expression RPAREN'
-    add_c_code(f'srand(time(NULL));')
-    add_c_code(f'int {t[1]} = rand() % ({t[5]} + 1);')
-    add_python_code(f'import random')
-    add_python_code(f'{t[1]} = random.randint(0, {t[5]})')
-    t[0] = f'{t[1]}'
+    'expression : RANDOM LPAREN expression RPAREN'
+    t[0] = f'random.randint(0, {t[3]})'
+    add_c_code(f'int {t[1]} = rand() % ({t[3]} + 1);')
+    add_python_code(f'{t[1]} = random.randint(0, {t[3]})')
 
 def p_expression_binop(t):
     '''expression : expression PLUS expression
@@ -184,14 +173,13 @@ def p_expression_binop(t):
 
 def p_expression_concat(t):
     'expression : expression CONCAT expression'
-    # Ensure the expressions being concatenated are strings
     length = len(c_code) + 1 * random.randint(1, 100) + random.randint(30, 100)
     add_c_code(f"char tmp_{length}[100];")
     add_c_code(f'strcpy(tmp_{length}, {t[1]});')
     add_c_code(f'strcat(tmp_{length}, {t[3]});')
     add_python_code(f'tmp_{length} = {t[1]} + {t[3]}')
     t[0] = f"tmp_{length}"
-    
+
 def p_expression_group(t):
     'expression : LPAREN expression RPAREN'
     t[0] = f"({t[2]})"
@@ -206,10 +194,21 @@ def p_expression_number(t):
 
 def p_expression_id(t):
     'expression : ID'
-    if t[1] == 'tmp':
-        t[0] = f'tmp'
+    t[0] = t[1]
+
+def p_expression_function_call(t):
+    'expression : ID LPAREN arg_list RPAREN'
+    t[0] = f"{t[1]}({', '.join(t[3])})"
+    add_c_code(f"{t[1]}({', '.join(t[3])});")
+    add_python_code(f"{t[1]}({', '.join(t[3])})")
+
+def p_arg_list(t):
+    '''arg_list : arg_list COMMA expression
+                | expression'''
+    if len(t) == 4:
+        t[0] = t[1] + [t[3]]
     else:
-        t[0] = t[1]
+        t[0] = [t[1]]
 
 def p_error(t):
     if t:

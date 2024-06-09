@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEleftCONCATCOLON COMMA COMMENT CONCAT DIVIDE END EQUALS FUNCTION ID INPUT INTERPOLATION LBRACKET LPAREN MINUS MULTILINE_COMMENT NUMBER PLUS PRINT RANDOM RBRACKET RPAREN SEMICOLON STRING TIMESstatements : statements statement\n                  | statementstatement : ID EQUALS expression SEMICOLONstatement : ID EQUALS STRING SEMICOLONstatement : ID EQUALS list SEMICOLONlist : LBRACKET elements RBRACKET\n            | LBRACKET RBRACKETelements : elements COMMA expression\n                | expressionstatement : PRINT LPAREN ID RPAREN SEMICOLONstatement : PRINT LPAREN STRING RPAREN SEMICOLONstatement : PRINT LPAREN expression RPAREN SEMICOLONstatement : expression SEMICOLONstatement : FUNCTION ID LPAREN param_list RPAREN COMMA COLON expression SEMICOLON\n                 | FUNCTION ID LPAREN RPAREN COMMA COLON expression SEMICOLONstatement : FUNCTION ID LPAREN param_list RPAREN COLON statements END\n                 | FUNCTION ID LPAREN RPAREN COLON statements ENDparam_list : param_list COMMA ID\n                  | IDstatement : ENDexpression : ID EQUALS INPUT LPAREN RPARENexpression : ID EQUALS RANDOM LPAREN expression RPARENexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : expression CONCAT expressionexpression : LPAREN expression RPARENexpression : STRINGexpression : NUMBERexpression : ID'
+_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEleftCONCATCOLON COMMA COMMENT CONCAT DIVIDE END EQUALS FUNCTION ID INPUT INTERPOLATION LBRACKET LPAREN MINUS MULTILINE_COMMENT NUMBER PLUS PRINT RANDOM RBRACKET RPAREN SEMICOLON STRING TIMESstatements : statements statement\n                  | statementstatement : ID EQUALS expression SEMICOLONstatement : ID EQUALS STRING SEMICOLONstatement : ID EQUALS list SEMICOLONlist : LBRACKET elements RBRACKET\n            | LBRACKET RBRACKETelements : elements COMMA expression\n                | expressionstatement : PRINT LPAREN ID RPAREN SEMICOLONstatement : PRINT LPAREN STRING RPAREN SEMICOLONstatement : PRINT LPAREN expression RPAREN SEMICOLONstatement : expression SEMICOLONstatement : FUNCTION ID LPAREN param_list RPAREN COMMA COLON expression SEMICOLON\n                 | FUNCTION ID LPAREN RPAREN COMMA COLON expression SEMICOLONstatement : FUNCTION ID LPAREN param_list RPAREN COLON statements END\n                 | FUNCTION ID LPAREN RPAREN COLON statements ENDparam_list : param_list COMMA ID\n                  | IDstatement : ENDexpression : INPUT LPAREN RPARENexpression : RANDOM LPAREN expression RPARENexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : expression CONCAT expressionexpression : LPAREN expression RPARENexpression : STRINGexpression : NUMBERexpression : IDexpression : ID LPAREN arg_list RPARENarg_list : arg_list COMMA expression\n                | expression'
     
-_lr_action_items = {'ID':([0,1,2,7,8,9,11,12,13,14,15,16,17,18,19,28,39,40,41,42,44,57,58,59,60,62,64,68,70,71,72,73,75,77,78,79,],[3,3,-2,21,22,-20,-1,21,-13,21,21,21,21,21,34,21,51,-3,-4,-5,21,21,-10,-11,-12,69,3,3,21,3,21,3,-17,-16,-15,-14,]),'PRINT':([0,1,2,9,11,13,40,41,42,58,59,60,64,68,71,73,75,77,78,79,],[6,6,-2,-20,-1,-13,-3,-4,-5,-10,-11,-12,6,6,6,6,-17,-16,-15,-14,]),'FUNCTION':([0,1,2,9,11,13,40,41,42,58,59,60,64,68,71,73,75,77,78,79,],[8,8,-2,-20,-1,-13,-3,-4,-5,-10,-11,-12,8,8,8,8,-17,-16,-15,-14,]),'END':([0,1,2,9,11,13,40,41,42,58,59,60,64,68,71,73,75,77,78,79,],[9,9,-2,-20,-1,-13,-3,-4,-5,-10,-11,-12,9,9,75,77,-17,-16,-15,-14,]),'LPAREN':([0,1,2,6,7,9,11,12,13,14,15,16,17,18,19,22,26,27,28,40,41,42,44,57,58,59,60,64,68,70,71,72,73,75,77,78,79,],[7,7,-2,19,7,-20,-1,7,-13,7,7,7,7,7,7,39,43,44,7,-3,-4,-5,7,7,-10,-11,-12,7,7,7,7,7,7,-17,-16,-15,-14,]),'STRING':([0,1,2,7,9,11,12,13,14,15,16,17,18,19,28,40,41,42,44,57,58,59,60,64,68,70,71,72,73,75,77,78,79,],[5,5,-2,5,-20,-1,24,-13,5,5,5,5,5,35,5,-3,-4,-5,5,5,-10,-11,-12,5,5,5,5,5,5,-17,-16,-15,-14,]),'NUMBER':([0,1,2,7,9,11,12,13,14,15,16,17,18,19,28,40,41,42,44,57,58,59,60,64,68,70,71,72,73,75,77,78,79,],[10,10,-2,10,-20,-1,10,-13,10,10,10,10,10,10,10,-3,-4,-5,10,10,-10,-11,-12,10,10,10,10,10,10,-17,-16,-15,-14,]),'$end':([1,2,9,11,13,40,41,42,58,59,60,75,77,78,79,],[0,-2,-20,-1,-13,-3,-4,-5,-10,-11,-12,-17,-16,-15,-14,]),'EQUALS':([3,21,34,],[12,38,38,]),'SEMICOLON':([3,4,5,10,21,23,24,25,29,30,31,32,33,37,46,48,49,50,54,56,65,74,76,],[-31,13,-29,-30,-31,40,41,42,-23,-24,-25,-26,-27,-28,-7,58,59,60,-21,-6,-22,78,79,]),'PLUS':([3,4,5,10,20,21,23,24,29,30,31,32,33,34,35,36,37,47,54,55,65,66,74,76,],[-31,14,-29,-30,14,-31,14,-29,-23,-24,-25,-26,-27,-31,-29,14,-28,14,-21,14,-22,14,14,14,]),'MINUS':([3,4,5,10,20,21,23,24,29,30,31,32,33,34,35,36,37,47,54,55,65,66,74,76,],[-31,15,-29,-30,15,-31,15,-29,-23,-24,-25,-26,-27,-31,-29,15,-28,15,-21,15,-22,15,15,15,]),'TIMES':([3,4,5,10,20,21,23,24,29,30,31,32,33,34,35,36,37,47,54,55,65,66,74,76,],[-31,16,-29,-30,16,-31,16,-29,16,16,-25,-26,-27,-31,-29,16,-28,16,-21,16,-22,16,16,16,]),'DIVIDE':([3,4,5,10,20,21,23,24,29,30,31,32,33,34,35,36,37,47,54,55,65,66,74,76,],[-31,17,-29,-30,17,-31,17,-29,17,17,-25,-26,-27,-31,-29,17,-28,17,-21,17,-22,17,17,17,]),'CONCAT':([3,4,5,10,20,21,23,24,29,30,31,32,33,34,35,36,37,47,54,55,65,66,74,76,],[-31,18,-29,-30,18,-31,18,-29,18,18,18,18,-27,-31,-29,18,-28,18,-21,18,-22,18,18,18,]),'RPAREN':([5,10,20,21,29,30,31,32,33,34,35,36,37,39,43,51,52,54,55,65,69,],[-29,-30,37,-31,-23,-24,-25,-26,-27,48,49,50,-28,53,54,-19,61,-21,65,-22,-18,]),'RBRACKET':([5,10,21,28,29,30,31,32,33,37,45,47,54,65,66,],[-29,-30,-31,46,-23,-24,-25,-26,-27,-28,56,-9,-21,-22,-8,]),'COMMA':([5,10,21,29,30,31,32,33,37,45,47,51,52,53,54,61,65,66,69,],[-29,-30,-31,-23,-24,-25,-26,-27,-28,57,-9,-19,62,63,-21,67,-22,-8,-18,]),'INPUT':([12,38,],[26,26,]),'RANDOM':([12,38,],[27,27,]),'LBRACKET':([12,],[28,]),'COLON':([53,61,63,67,],[64,68,70,72,]),}
+_lr_action_items = {'ID':([0,1,2,7,8,9,13,14,15,16,17,18,19,20,21,22,27,31,43,46,47,48,53,62,64,65,66,68,70,73,75,76,77,78,80,82,83,84,],[3,3,-2,24,25,-20,-1,24,24,-13,24,24,24,24,24,39,24,24,57,-3,-4,-5,24,24,-10,-11,-12,74,3,3,24,3,24,3,-17,-16,-15,-14,]),'PRINT':([0,1,2,9,13,16,46,47,48,64,65,66,70,73,76,78,80,82,83,84,],[6,6,-2,-20,-1,-13,-3,-4,-5,-10,-11,-12,6,6,6,6,-17,-16,-15,-14,]),'FUNCTION':([0,1,2,9,13,16,46,47,48,64,65,66,70,73,76,78,80,82,83,84,],[8,8,-2,-20,-1,-13,-3,-4,-5,-10,-11,-12,8,8,8,8,-17,-16,-15,-14,]),'END':([0,1,2,9,13,16,46,47,48,64,65,66,70,73,76,78,80,82,83,84,],[9,9,-2,-20,-1,-13,-3,-4,-5,-10,-11,-12,9,9,80,82,-17,-16,-15,-14,]),'INPUT':([0,1,2,7,9,13,14,15,16,17,18,19,20,21,22,27,31,46,47,48,53,62,64,65,66,70,73,75,76,77,78,80,82,83,84,],[10,10,-2,10,-20,-1,10,10,-13,10,10,10,10,10,10,10,10,-3,-4,-5,10,10,-10,-11,-12,10,10,10,10,10,10,-17,-16,-15,-14,]),'RANDOM':([0,1,2,7,9,13,14,15,16,17,18,19,20,21,22,27,31,46,47,48,53,62,64,65,66,70,73,75,76,77,78,80,82,83,84,],[11,11,-2,11,-20,-1,11,11,-13,11,11,11,11,11,11,11,11,-3,-4,-5,11,11,-10,-11,-12,11,11,11,11,11,11,-17,-16,-15,-14,]),'LPAREN':([0,1,2,3,6,7,9,10,11,13,14,15,16,17,18,19,20,21,22,24,25,27,31,39,46,47,48,53,62,64,65,66,70,73,75,76,77,78,80,82,83,84,],[7,7,-2,15,22,7,-20,26,27,-1,7,7,-13,7,7,7,7,7,7,15,43,7,7,15,-3,-4,-5,7,7,-10,-11,-12,7,7,7,7,7,7,-17,-16,-15,-14,]),'STRING':([0,1,2,7,9,13,14,15,16,17,18,19,20,21,22,27,31,46,47,48,53,62,64,65,66,70,73,75,76,77,78,80,82,83,84,],[5,5,-2,5,-20,-1,29,5,-13,5,5,5,5,5,40,5,5,-3,-4,-5,5,5,-10,-11,-12,5,5,5,5,5,5,-17,-16,-15,-14,]),'NUMBER':([0,1,2,7,9,13,14,15,16,17,18,19,20,21,22,27,31,46,47,48,53,62,64,65,66,70,73,75,76,77,78,80,82,83,84,],[12,12,-2,12,-20,-1,12,12,-13,12,12,12,12,12,12,12,12,-3,-4,-5,12,12,-10,-11,-12,12,12,12,12,12,12,-17,-16,-15,-14,]),'$end':([1,2,9,13,16,46,47,48,64,65,66,80,82,83,84,],[0,-2,-20,-1,-13,-3,-4,-5,-10,-11,-12,-17,-16,-15,-14,]),'EQUALS':([3,],[14,]),'SEMICOLON':([3,4,5,12,24,28,29,30,34,35,36,37,38,42,44,50,52,54,55,56,60,61,79,81,],[-31,16,-29,-30,-31,46,47,48,-23,-24,-25,-26,-27,-28,-21,-7,-32,64,65,66,-22,-6,83,84,]),'PLUS':([3,4,5,12,23,24,28,29,33,34,35,36,37,38,39,40,41,42,44,45,51,52,60,63,71,79,81,],[-31,17,-29,-30,17,-31,17,-29,17,-23,-24,-25,-26,-27,-31,-29,17,-28,-21,17,17,-32,-22,17,17,17,17,]),'MINUS':([3,4,5,12,23,24,28,29,33,34,35,36,37,38,39,40,41,42,44,45,51,52,60,63,71,79,81,],[-31,18,-29,-30,18,-31,18,-29,18,-23,-24,-25,-26,-27,-31,-29,18,-28,-21,18,18,-32,-22,18,18,18,18,]),'TIMES':([3,4,5,12,23,24,28,29,33,34,35,36,37,38,39,40,41,42,44,45,51,52,60,63,71,79,81,],[-31,19,-29,-30,19,-31,19,-29,19,19,19,-25,-26,-27,-31,-29,19,-28,-21,19,19,-32,-22,19,19,19,19,]),'DIVIDE':([3,4,5,12,23,24,28,29,33,34,35,36,37,38,39,40,41,42,44,45,51,52,60,63,71,79,81,],[-31,20,-29,-30,20,-31,20,-29,20,20,20,-25,-26,-27,-31,-29,20,-28,-21,20,20,-32,-22,20,20,20,20,]),'CONCAT':([3,4,5,12,23,24,28,29,33,34,35,36,37,38,39,40,41,42,44,45,51,52,60,63,71,79,81,],[-31,21,-29,-30,21,-31,21,-29,21,21,21,21,21,-27,-31,-29,21,-28,-21,21,21,-32,-22,21,21,21,21,]),'RPAREN':([5,12,23,24,26,32,33,34,35,36,37,38,39,40,41,42,43,44,45,52,57,58,60,63,74,],[-29,-30,42,-31,44,52,-34,-23,-24,-25,-26,-27,54,55,56,-28,59,-21,60,-32,-19,67,-22,-33,-18,]),'COMMA':([5,12,24,32,33,34,35,36,37,38,42,44,49,51,52,57,58,59,60,63,67,71,74,],[-29,-30,-31,53,-34,-23,-24,-25,-26,-27,-28,-21,62,-9,-32,-19,68,69,-22,-33,72,-8,-18,]),'RBRACKET':([5,12,24,31,34,35,36,37,38,42,44,49,51,52,60,71,],[-29,-30,-31,50,-23,-24,-25,-26,-27,-28,-21,61,-9,-32,-22,-8,]),'LBRACKET':([14,],[31,]),'COLON':([59,67,69,72,],[70,73,75,77,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statements':([0,64,68,],[1,71,73,]),'statement':([0,1,64,68,71,73,],[2,11,2,2,11,11,]),'expression':([0,1,7,12,14,15,16,17,18,19,28,44,57,64,68,70,71,72,73,],[4,4,20,23,29,30,31,32,33,36,47,55,66,4,4,74,4,76,4,]),'list':([12,],[25,]),'elements':([28,],[45,]),'param_list':([39,],[52,]),}
+_lr_goto_items = {'statements':([0,70,73,],[1,76,78,]),'statement':([0,1,70,73,76,78,],[2,13,2,2,13,13,]),'expression':([0,1,7,14,15,17,18,19,20,21,22,27,31,53,62,70,73,75,76,77,78,],[4,4,23,28,33,34,35,36,37,38,41,45,51,63,71,4,4,79,4,81,4,]),'list':([14,],[30,]),'arg_list':([15,],[32,]),'elements':([31,],[49,]),'param_list':([43,],[58,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,35 +27,38 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statements","S'",1,None,None,None),
-  ('statements -> statements statement','statements',2,'p_statements','cparser.py',28),
-  ('statements -> statement','statements',1,'p_statements','cparser.py',29),
-  ('statement -> ID EQUALS expression SEMICOLON','statement',4,'p_statement_assign','cparser.py',36),
-  ('statement -> ID EQUALS STRING SEMICOLON','statement',4,'p_statement_assign_string','cparser.py',46),
-  ('statement -> ID EQUALS list SEMICOLON','statement',4,'p_statement_assign_list','cparser.py',51),
-  ('list -> LBRACKET elements RBRACKET','list',3,'p_list','cparser.py',57),
-  ('list -> LBRACKET RBRACKET','list',2,'p_list','cparser.py',58),
-  ('elements -> elements COMMA expression','elements',3,'p_elements','cparser.py',65),
-  ('elements -> expression','elements',1,'p_elements','cparser.py',66),
-  ('statement -> PRINT LPAREN ID RPAREN SEMICOLON','statement',5,'p_statement_print_list','cparser.py',73),
-  ('statement -> PRINT LPAREN STRING RPAREN SEMICOLON','statement',5,'p_statement_print_string','cparser.py',84),
-  ('statement -> PRINT LPAREN expression RPAREN SEMICOLON','statement',5,'p_statement_print_expr','cparser.py',105),
-  ('statement -> expression SEMICOLON','statement',2,'p_statement_expr','cparser.py',111),
-  ('statement -> FUNCTION ID LPAREN param_list RPAREN COMMA COLON expression SEMICOLON','statement',9,'p_statement_function_oneliner_declaration','cparser.py',116),
-  ('statement -> FUNCTION ID LPAREN RPAREN COMMA COLON expression SEMICOLON','statement',8,'p_statement_function_oneliner_declaration','cparser.py',117),
-  ('statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END','statement',8,'p_statement_function_declaration','cparser.py',127),
-  ('statement -> FUNCTION ID LPAREN RPAREN COLON statements END','statement',7,'p_statement_function_declaration','cparser.py',128),
-  ('param_list -> param_list COMMA ID','param_list',3,'p_param_list','cparser.py',144),
-  ('param_list -> ID','param_list',1,'p_param_list','cparser.py',145),
-  ('statement -> END','statement',1,'p_statement_end','cparser.py',152),
-  ('expression -> ID EQUALS INPUT LPAREN RPAREN','expression',5,'p_expression_input','cparser.py',157),
-  ('expression -> ID EQUALS RANDOM LPAREN expression RPAREN','expression',6,'p_expression_random','cparser.py',164),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','cparser.py',172),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','cparser.py',173),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','cparser.py',174),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','cparser.py',175),
-  ('expression -> expression CONCAT expression','expression',3,'p_expression_concat','cparser.py',186),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','cparser.py',196),
-  ('expression -> STRING','expression',1,'p_expression_string','cparser.py',200),
-  ('expression -> NUMBER','expression',1,'p_expression_number','cparser.py',204),
-  ('expression -> ID','expression',1,'p_expression_id','cparser.py',208),
+  ('statements -> statements statement','statements',2,'p_statements','cparser.py',29),
+  ('statements -> statement','statements',1,'p_statements','cparser.py',30),
+  ('statement -> ID EQUALS expression SEMICOLON','statement',4,'p_statement_assign','cparser.py',37),
+  ('statement -> ID EQUALS STRING SEMICOLON','statement',4,'p_statement_assign_string','cparser.py',43),
+  ('statement -> ID EQUALS list SEMICOLON','statement',4,'p_statement_assign_list','cparser.py',48),
+  ('list -> LBRACKET elements RBRACKET','list',3,'p_list','cparser.py',54),
+  ('list -> LBRACKET RBRACKET','list',2,'p_list','cparser.py',55),
+  ('elements -> elements COMMA expression','elements',3,'p_elements','cparser.py',62),
+  ('elements -> expression','elements',1,'p_elements','cparser.py',63),
+  ('statement -> PRINT LPAREN ID RPAREN SEMICOLON','statement',5,'p_statement_print_list','cparser.py',70),
+  ('statement -> PRINT LPAREN STRING RPAREN SEMICOLON','statement',5,'p_statement_print_string','cparser.py',81),
+  ('statement -> PRINT LPAREN expression RPAREN SEMICOLON','statement',5,'p_statement_print_expr','cparser.py',96),
+  ('statement -> expression SEMICOLON','statement',2,'p_statement_expr','cparser.py',101),
+  ('statement -> FUNCTION ID LPAREN param_list RPAREN COMMA COLON expression SEMICOLON','statement',9,'p_statement_function_oneliner_declaration','cparser.py',104),
+  ('statement -> FUNCTION ID LPAREN RPAREN COMMA COLON expression SEMICOLON','statement',8,'p_statement_function_oneliner_declaration','cparser.py',105),
+  ('statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END','statement',8,'p_statement_function_declaration','cparser.py',115),
+  ('statement -> FUNCTION ID LPAREN RPAREN COLON statements END','statement',7,'p_statement_function_declaration','cparser.py',116),
+  ('param_list -> param_list COMMA ID','param_list',3,'p_param_list','cparser.py',136),
+  ('param_list -> ID','param_list',1,'p_param_list','cparser.py',137),
+  ('statement -> END','statement',1,'p_statement_end','cparser.py',144),
+  ('expression -> INPUT LPAREN RPAREN','expression',3,'p_expression_input','cparser.py',149),
+  ('expression -> RANDOM LPAREN expression RPAREN','expression',4,'p_expression_random','cparser.py',155),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','cparser.py',161),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','cparser.py',162),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','cparser.py',163),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','cparser.py',164),
+  ('expression -> expression CONCAT expression','expression',3,'p_expression_concat','cparser.py',175),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','cparser.py',184),
+  ('expression -> STRING','expression',1,'p_expression_string','cparser.py',188),
+  ('expression -> NUMBER','expression',1,'p_expression_number','cparser.py',192),
+  ('expression -> ID','expression',1,'p_expression_id','cparser.py',196),
+  ('expression -> ID LPAREN arg_list RPAREN','expression',4,'p_expression_function_call','cparser.py',200),
+  ('arg_list -> arg_list COMMA expression','arg_list',3,'p_arg_list','cparser.py',206),
+  ('arg_list -> expression','arg_list',1,'p_arg_list','cparser.py',207),
 ]
