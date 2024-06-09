@@ -35,6 +35,9 @@ def p_statements(t):
 
 def p_statement_assign(t):
     'statement : ID EQUALS expression SEMICOLON'
+    # if ID has a ? or a ! reove them
+    if t[1].endswith('?') or t[1].endswith('!'):
+        t[1] = t[1][:-1]
     if not hasattr(t.lexer, 'inside_function') or not t.lexer.inside_function:
         add_c_code(f"int {t[1]} = {t[3]};")
         add_python_code(f"{t[1]} = {t[3]}")
@@ -45,6 +48,8 @@ def p_statement_assign(t):
 
 def p_statement_assign_string(t):
     'statement : ID EQUALS STRING SEMICOLON'
+    if t[1].endswith('?') or t[1].endswith('!'):
+        t[1] = t[1][:-1]
     if not hasattr(t.lexer, 'inside_function') or not t.lexer.inside_function:
         add_c_code(f"char {t[1]}[] = {t[3]};")
         add_python_code(f"{t[1]} = {t[3]}")
@@ -52,6 +57,38 @@ def p_statement_assign_string(t):
         add_c_code(f"{t[1]} = {t[3]};")
         add_python_code(f"{t[1]} = {t[3]}")
     t[0] = f"{t[1]} = {t[3]}"
+
+def p_statement_assign_list(t):
+    'statement : ID EQUALS list SEMICOLON'
+    add_c_code(f"int {t[1]}[] = {{{', '.join(map(str, t[3]))}}};")
+    add_python_code(f"{t[1]} = {t[3]}")
+
+def p_list(t):
+    '''list : LBRACKET elements RBRACKET
+            | LBRACKET RBRACKET'''
+    if len(t) == 3:  # Empty list
+        t[0] = []
+    else:
+        t[0] = t[2]
+
+def p_elements(t):
+    '''elements : elements COMMA expression
+                | expression'''
+    if len(t) == 4:
+        t[0] = t[1] + [t[3]]
+    else:
+        t[0] = [t[1]]
+
+def p_statement_print_list(t):
+    'statement : PRINT LPAREN ID RPAREN SEMICOLON'
+    add_c_code(f'printf("[");')
+    add_c_code(f'int n = sizeof({t[3]}) / sizeof({t[3]}[0]);')
+    add_c_code(f'for(int i = 0; i < n; i++) {{')
+    add_c_code(f'    printf("%d", {t[3]}[i]);')
+    add_c_code(f'    if (i < n - 1) printf(", ");')
+    add_c_code(f'}}')
+    add_c_code(f'printf("]");')
+    add_python_code(f'print({t[3]})')
 
 def p_statement_print_string(t):
     'statement : PRINT LPAREN STRING RPAREN SEMICOLON'
