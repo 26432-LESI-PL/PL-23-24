@@ -12,7 +12,7 @@ reserved = {
     'ESCREVER': 'PRINT',
     'ENTRADA': 'INPUT',
     'ALEATORIO': 'RANDOM',
-    'FUNCAO': 'FUNC',
+    'FUNCAO': 'FUNCTION',
     'FIM': 'END'
 }
 tokens = tokens + list(reserved.values())
