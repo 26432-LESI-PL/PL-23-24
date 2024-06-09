@@ -19,7 +19,10 @@ def add_code(line):
 def p_statements(t):
     '''statements : statements statement
                   | statement'''
-    pass
+    if len(t) == 3:
+        t[0] = t[1] + [t[2]]
+    else:
+        t[0] = [t[1]]
 
 def p_statement_assign(t):
     'statement : ID EQUALS expression SEMICOLON'
@@ -59,6 +62,36 @@ def p_statement_expr(t):
     'statement : expression SEMICOLON'
     # Do nothing, the expression will generate the code
     #add_code(f"{t[1]};")
+
+def p_statement_function_oneliner_declaration(t):
+    '''statement : FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON
+                 | FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON'''
+    if len(t) == 9:  # If the function has parameters and a return expression
+        params = ', '.join([f'int {param}' for param in t[4]])
+        add_code(f'int {t[2]}({params}) {{ return {t[7]}; }}')
+    else:  # If the function has parameters but no return expression
+        add_code(f'int {t[2]}() {{ return {t[6]}; }}')
+
+
+def p_statement_function_declaration(t):
+    '''statement : FUNCTION ID LPAREN param_list RPAREN COLON
+                 | FUNCTION ID LPAREN RPAREN COLON'''
+    if len(t) == 7:  # If the function is only the name and parameters
+        params = ', '.join([f'int {param}' for param in t[4]])
+        add_code(f'int {t[2]}({params}) {{}}')
+    else:  # If the function has no parameters
+        add_code(f'int {t[2]}() {{}}')
+def p_param_list(t):
+    '''param_list : param_list COMMA ID
+                  | ID'''
+    if len(t) == 4:
+        t[0] = t[1] + [t[3]]
+    else:
+        t[0] = [t[1]]
+
+def p_statement_end(t):
+    'statement : END'
+    add_code('}')
 
 def p_expression_input(t):
     'expression : ID EQUALS INPUT LPAREN RPAREN'
