@@ -179,6 +179,7 @@ def p_expression_random(t):
     'expression : RANDOM LPAREN expression RPAREN'
     t[0] = f'random.randint(0, {t[3]})'
     add_c_code(f'int {t[1]} = rand() % ({t[3]} + 1);')
+    add_python_code("import random")
     add_python_code(f'{t[1]} = random.randint(0, {t[3]})')
 
 def p_expression_binop(t):
