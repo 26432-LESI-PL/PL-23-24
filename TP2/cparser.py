@@ -128,6 +128,10 @@ def p_statement_function_oneliner_declaration(t):
 def p_statement_function_declaration(t):
     '''statement : FUNCTION ID LPAREN param_list RPAREN COLON statements END
                  | FUNCTION ID LPAREN RPAREN COLON statements END'''
+    if len(python_code) > 0:
+        python_code.pop()
+    if len(c_code) > 0:
+        c_code.pop()
     t.lexer.inside_function = True
     if len(t) == 9:
         params = ', '.join([f'int {param}' for param in t[4]])
