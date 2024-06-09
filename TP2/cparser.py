@@ -52,7 +52,7 @@ def p_statement_print_string(t):
         # Add the printf statement with the variables
         add_code(f'printf({t[3]}, {", ".join(vars)});')
     else:
-        add_code(f'printf("{t[3].replace("%", "%%")}");')
+        add_code(f'printf({t[3].replace("%", "%%")});')
 
 def p_statement_print_expr(t):
     'statement : PRINT LPAREN expression RPAREN SEMICOLON'
@@ -81,7 +81,8 @@ def p_statement_function_declaration(t):
         params = ', '.join([f'int {param}' for param in t[4]])
         add_code(f'int {t[2]}({params}) {{}}')
     else:  # If the function has no parameters
-        add_code(f'int {t[2]}() {{}}')
+        add_code(f'int {t[2]}() {{{t[6]}}}')
+
 def p_param_list(t):
     '''param_list : param_list COMMA ID
                   | ID'''

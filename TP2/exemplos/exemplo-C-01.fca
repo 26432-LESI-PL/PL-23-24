@@ -1,6 +1,6 @@
 
---FUNCAO soma(a,b): a+b ;
-FUNCAO soma2(c):
+FUNCAO soma(a,b): a+b ;
+{-FUNCAO soma2(c):
 	c = c+1 ;
 	c+1 ;
-FIM
+FIM-}
