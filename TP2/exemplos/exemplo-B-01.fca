@@ -1,4 +1,4 @@
---valor = 10; -- Não definido originalmente
+valor = 10; -- Não definido originalmente (apenas para CI,/CD não falhar)
 ESCREVER(valor);   -- conteúdo de valor é apresentado
 ESCREVER(365 * 2); -- 730
 ESCREVER("Ola Mundo"); -- Olá, Mundo!
