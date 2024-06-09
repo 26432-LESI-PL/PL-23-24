@@ -91,8 +91,6 @@ def p_statement_function_oneliner_declaration(t):
 def p_statement_function_declaration(t):
     '''statement : FUNCTION ID LPAREN param_list RPAREN COLON statements END
                  | FUNCTION ID LPAREN RPAREN COLON statements END'''
-    python_code.pop(-1)  # Remove the END statement from the Python code
-    c_code.pop(-1)  # Remove the closing brace from the C code
     t.lexer.inside_function = True
     if len(t) == 9:
         params = ', '.join([f'int {param}' for param in t[4]])
@@ -179,8 +177,8 @@ def p_expression_id(t):
 def p_expression_function_call(t):
     'expression : ID LPAREN arg_list RPAREN'
     t[0] = f"{t[1]}({', '.join(t[3])})"
-    add_c_code(f"{t[1]}({', '.join(t[3])});")
-    add_python_code(f"{t[1]}({', '.join(t[3])})")
+    #add_c_code(f"{t[1]}({', '.join(t[3])});")
+    #add_python_code(f"{t[1]}({', '.join(t[3])})")
 
 def p_arg_list(t):
     '''arg_list : arg_list COMMA expression
