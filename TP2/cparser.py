@@ -13,7 +13,7 @@ precedence = (
 c_code = []
 
 # Helper function to add a line of code
-def add_code(line):
+def add_c_code(line):
     c_code.append(line)
 
 def p_statements(t):
@@ -30,12 +30,12 @@ def p_statement_assign(t):
     # This is to avoid conflicts with the C syntax
     if t[1].endswith('?') or t[1].endswith('!'):
         t[1] = t[1][:-1]
-    add_code(f"int {t[1]} = {t[3]};")
+    add_c_code(f"int {t[1]} = {t[3]};")
     t[0] = f"int {t[1]} = {t[3]};"
 
 def p_statement_assign_string(t):
     'statement : ID EQUALS STRING SEMICOLON'
-    add_code(f"char {t[1]}[] = {t[3]};")
+    add_c_code(f"char {t[1]}[] = {t[3]};")
 
 def p_statement_print_string(t):
     'statement : PRINT LPAREN STRING RPAREN SEMICOLON'
@@ -50,28 +50,28 @@ def p_statement_print_string(t):
         for var in vars:
             t[3] = t[3].replace(f'#{{{var}}}', '%s')
         # Add the printf statement with the variables
-        add_code(f'printf({t[3]}, {", ".join(vars)});')
+        add_c_code(f'printf({t[3]}, {", ".join(vars)});')
     else:
-        add_code(f'printf({t[3].replace("%", "%%")});')
+        add_c_code(f'printf({t[3].replace("%", "%%")});')
 
 def p_statement_print_expr(t):
     'statement : PRINT LPAREN expression RPAREN SEMICOLON'
-    add_code(f'printf("%s", {t[3]});')
+    add_c_code(f'printf("%s", {t[3]});')
 
 # Generic expression statement
 def p_statement_expr(t):
     'statement : expression SEMICOLON'
     # Do nothing, the expression will generate the code
-    #add_code(f"{t[1]};")
+    #add_c_code(f"{t[1]};")
 
 def p_statement_function_oneliner_declaration(t):
-    '''statement : FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON
-                 | FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON'''
-    if len(t) == 9:  # If the function has parameters and a return expression
+    '''statement : FUNCTION ID LPAREN param_list RPAREN COMMA COLON expression SEMICOLON
+                 | FUNCTION ID LPAREN RPAREN COMMA COLON expression SEMICOLON'''
+    if len(t) == 10:  # If the function has parameters and a return expression
         params = ', '.join([f'int {param}' for param in t[4]])
-        add_code(f'int {t[2]}({params}) {{ return {t[7]}; }}')
+        add_c_code(f'int {t[2]}({params}) {{ return {t[8]}; }}')
     else:  # If the function has parameters but no return expression
-        add_code(f'int {t[2]}() {{ return {t[6]}; }}')
+        add_c_code(f'int {t[2]}() {{ return {t[6]}; }}')
 
 
 def p_statement_function_declaration(t):
@@ -79,9 +79,9 @@ def p_statement_function_declaration(t):
                  | FUNCTION ID LPAREN RPAREN COLON'''
     if len(t) == 7:  # If the function is only the name and parameters
         params = ', '.join([f'int {param}' for param in t[4]])
-        add_code(f'int {t[2]}({params}) {{}}')
+        add_c_code(f'int {t[2]}({params}) {{}}')
     else:  # If the function has no parameters
-        add_code(f'int {t[2]}() {{{t[6]}}}')
+        add_c_code(f'int {t[2]}() {{{t[6]}}}')
 
 def p_param_list(t):
     '''param_list : param_list COMMA ID
@@ -93,18 +93,18 @@ def p_param_list(t):
 
 def p_statement_end(t):
     'statement : END'
-    add_code('}')
+    add_c_code('}')
 
 def p_expression_input(t):
     'expression : ID EQUALS INPUT LPAREN RPAREN'
-    add_code(f'char {t[1]}[100];')
-    add_code(f'gets({t[1]});')
+    add_c_code(f'char {t[1]}[100];')
+    add_c_code(f'gets({t[1]});')
     t[0] = f'{t[1]}'
 
 def p_expression_random(t):
     'expression : ID EQUALS RANDOM LPAREN expression RPAREN'
-    add_code(f'srand(time(NULL));')
-    add_code(f'int {t[1]} = rand() % ({t[5]} + 1);')
+    add_c_code(f'srand(time(NULL));')
+    add_c_code(f'int {t[1]} = rand() % ({t[5]} + 1);')
     t[0] = f'{t[1]}'
 
 def p_expression_binop(t):
@@ -125,9 +125,9 @@ def p_expression_concat(t):
     'expression : expression CONCAT expression'
     # Ensure the expressions being concatenated are strings
     length = len(c_code) + 1 * random.randint(1, 100) + random.randint(30, 100)
-    add_code(f"char tmp_{length}[100];")
-    add_code(f'strcpy(tmp_{length}, {t[1]});')
-    add_code(f'strcat(tmp_{length}, {t[3]});')
+    add_c_code(f"char tmp_{length}[100];")
+    add_c_code(f'strcpy(tmp_{length}, {t[1]});')
+    add_c_code(f'strcat(tmp_{length}, {t[3]});')
     t[0] = f"tmp_{length}"
     
 def p_expression_group(t):
