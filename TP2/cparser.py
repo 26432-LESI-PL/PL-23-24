@@ -2,6 +2,8 @@ import random
 import ply.yacc as yacc
 from lexer import tokens
 
+tokens = tokens
+
 # Precedence rules for arithmetic operators
 precedence = (
     ('left', 'PLUS', 'MINUS'),
