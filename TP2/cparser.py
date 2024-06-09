@@ -35,47 +35,23 @@ def p_statements(t):
 
 def p_statement_assign(t):
     'statement : ID EQUALS expression SEMICOLON'
-    add_c_code(f"int {t[1]} = {t[3]};")
-    add_python_code(f"{t[1]} = {t[3]}")
+    if not hasattr(t.lexer, 'inside_function') or not t.lexer.inside_function:
+        add_c_code(f"int {t[1]} = {t[3]};")
+        add_python_code(f"{t[1]} = {t[3]}")
+    else:
+        add_c_code(f"{t[1]} = {t[3]};")
+        add_python_code(f"{t[1]} = {t[3]}")
     t[0] = f"{t[1]} = {t[3]}"
 
 def p_statement_assign_string(t):
     'statement : ID EQUALS STRING SEMICOLON'
-    add_c_code(f"char {t[1]}[] = {t[3]};")
-    add_python_code(f"{t[1]} = {t[3]}")
-
-def p_statement_assign_list(t):
-    'statement : ID EQUALS list SEMICOLON'
-    array_size = len(t[3])
-    add_c_code(f"int {t[1]}[] = {{{', '.join(map(str, t[3]))}}};")
-    add_python_code(f"{t[1]} = {t[3]}")
-
-def p_list(t):
-    '''list : LBRACKET elements RBRACKET
-            | LBRACKET RBRACKET'''
-    if len(t) == 3:  # Empty list
-        t[0] = []
+    if not hasattr(t.lexer, 'inside_function') or not t.lexer.inside_function:
+        add_c_code(f"char {t[1]}[] = {t[3]};")
+        add_python_code(f"{t[1]} = {t[3]}")
     else:
-        t[0] = t[2]
-
-def p_elements(t):
-    '''elements : elements COMMA expression
-                | expression'''
-    if len(t) == 4:
-        t[0] = t[1] + [t[3]]
-    else:
-        t[0] = [t[1]]
-
-def p_statement_print_list(t):
-    'statement : PRINT LPAREN ID RPAREN SEMICOLON'
-    add_c_code(f'printf("[");')
-    add_c_code(f'int n = sizeof({t[3]}) / sizeof({t[3]}[0]);')
-    add_c_code(f'for(int i = 0; i < n; i++) {{')
-    add_c_code(f'    printf("%d", {t[3]}[i]);')
-    add_c_code(f'    if (i < n - 1) printf(", ");')
-    add_c_code(f'}}')
-    add_c_code(f'printf("]");')
-    add_python_code(f'print({t[3]})')
+        add_c_code(f"{t[1]} = {t[3]};")
+        add_python_code(f"{t[1]} = {t[3]}")
+    t[0] = f"{t[1]} = {t[3]}"
 
 def p_statement_print_string(t):
     'statement : PRINT LPAREN STRING RPAREN SEMICOLON'
@@ -99,6 +75,7 @@ def p_statement_print_expr(t):
 
 def p_statement_expr(t):
     'statement : expression SEMICOLON'
+    t[0] = t[1]
 
 def p_statement_function_oneliner_declaration(t):
     '''statement : FUNCTION ID LPAREN param_list RPAREN COMMA COLON expression SEMICOLON
@@ -114,23 +91,31 @@ def p_statement_function_oneliner_declaration(t):
 def p_statement_function_declaration(t):
     '''statement : FUNCTION ID LPAREN param_list RPAREN COLON statements END
                  | FUNCTION ID LPAREN RPAREN COLON statements END'''
+    python_code.pop(-1)  # Remove the END statement from the Python code
+    c_code.pop(-1)  # Remove the closing brace from the C code
+    t.lexer.inside_function = True
     if len(t) == 9:
         params = ', '.join([f'int {param}' for param in t[4]])
         add_c_code(f'int {t[2]}({params}) {{')
-        for stmt in t[7]:
-            add_c_code(stmt)
-        add_c_code('}')
         add_python_code(f'def {t[2]}({", ".join(t[4])}):')
-        for stmt in t[7]:
-            add_python_code(f'    {stmt}')
+        for stmt in t[7][:-1]:  # Iterate over all but the last statement
+            if stmt:
+                add_c_code(stmt)
+                add_python_code(f'    {stmt}')
+        add_c_code(f'return {t[7][-1]};')  # Set the last statement as the return value
+        add_python_code(f'    return {t[7][-1]}')
+        add_c_code('}')
     else:
         add_c_code(f'int {t[2]}() {{')
-        for stmt in t[6]:
-            add_c_code(stmt)
-        add_c_code('}')
         add_python_code(f'def {t[2]}():')
-        for stmt in t[6]:
-            add_python_code(f'    {stmt}')
+        for stmt in t[6][:-1]:  # Iterate over all but the last statement
+            if stmt:
+                add_c_code(stmt)
+                add_python_code(f'    {stmt}')
+        add_c_code(f'return {t[6][-1]};')  # Set the last statement as the return value
+        add_python_code(f'    return {t[6][-1]}')
+        add_c_code('}')
+    t.lexer.inside_function = False
 
 def p_param_list(t):
     '''param_list : param_list COMMA ID
@@ -173,12 +158,7 @@ def p_expression_binop(t):
 
 def p_expression_concat(t):
     'expression : expression CONCAT expression'
-    length = len(c_code) + 1 * random.randint(1, 100) + random.randint(30, 100)
-    add_c_code(f"char tmp_{length}[100];")
-    add_c_code(f'strcpy(tmp_{length}, {t[1]});')
-    add_c_code(f'strcat(tmp_{length}, {t[3]});')
-    add_python_code(f'tmp_{length} = {t[1]} + {t[3]}')
-    t[0] = f"tmp_{length}"
+    t[0] = f"({t[1]} + {t[3]})"
 
 def p_expression_group(t):
     'expression : LPAREN expression RPAREN'
