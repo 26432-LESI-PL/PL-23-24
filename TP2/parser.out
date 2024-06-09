@@ -20,7 +20,7 @@ Rule 6     statement -> PRINT LPAREN expression RPAREN SEMICOLON
 Rule 7     statement -> expression SEMICOLON
 Rule 8     statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON
 Rule 9     statement -> FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON
-Rule 10    statement -> FUNCTION ID LPAREN param_list RPAREN COLON
+Rule 10    statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END
 Rule 11    statement -> FUNCTION ID LPAREN RPAREN COLON
 Rule 12    param_list -> param_list COMMA ID
 Rule 13    param_list -> ID
@@ -44,7 +44,7 @@ COMMA                : 12
 COMMENT              : 
 CONCAT               : 21
 DIVIDE               : 20
-END                  : 14
+END                  : 10 14
 EQUALS               : 3 4 15 16
 FUNCTION             : 8 9 10 11
 ID                   : 3 4 8 9 10 11 12 13 15 16 25
@@ -70,7 +70,7 @@ Nonterminals, with rules where they appear
 expression           : 3 6 7 8 9 16 17 17 18 18 19 19 20 20 21 21 22
 param_list           : 8 10 12
 statement            : 1 2
-statements           : 1 0
+statements           : 1 10 0
 
 Parsing method: LALR
 
@@ -86,7 +86,7 @@ state 0
     (7) statement -> . expression SEMICOLON
     (8) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON
     (9) statement -> . FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON
-    (10) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON
+    (10) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON statements END
     (11) statement -> . FUNCTION ID LPAREN RPAREN COLON
     (14) statement -> . END
     (15) expression -> . ID EQUALS INPUT LPAREN RPAREN
@@ -124,7 +124,7 @@ state 1
     (7) statement -> . expression SEMICOLON
     (8) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON
     (9) statement -> . FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON
-    (10) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON
+    (10) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON statements END
     (11) statement -> . FUNCTION ID LPAREN RPAREN COLON
     (14) statement -> . END
     (15) expression -> . ID EQUALS INPUT LPAREN RPAREN
@@ -245,7 +245,7 @@ state 8
 
     (8) statement -> FUNCTION . ID LPAREN param_list RPAREN COLON expression SEMICOLON
     (9) statement -> FUNCTION . ID LPAREN RPAREN COLON expression SEMICOLON
-    (10) statement -> FUNCTION . ID LPAREN param_list RPAREN COLON
+    (10) statement -> FUNCTION . ID LPAREN param_list RPAREN COLON statements END
     (11) statement -> FUNCTION . ID LPAREN RPAREN COLON
 
     ID              shift and go to state 22
@@ -503,7 +503,7 @@ state 22
 
     (8) statement -> FUNCTION ID . LPAREN param_list RPAREN COLON expression SEMICOLON
     (9) statement -> FUNCTION ID . LPAREN RPAREN COLON expression SEMICOLON
-    (10) statement -> FUNCTION ID . LPAREN param_list RPAREN COLON
+    (10) statement -> FUNCTION ID . LPAREN param_list RPAREN COLON statements END
     (11) statement -> FUNCTION ID . LPAREN RPAREN COLON
 
     LPAREN          shift and go to state 36
@@ -735,7 +735,7 @@ state 36
 
     (8) statement -> FUNCTION ID LPAREN . param_list RPAREN COLON expression SEMICOLON
     (9) statement -> FUNCTION ID LPAREN . RPAREN COLON expression SEMICOLON
-    (10) statement -> FUNCTION ID LPAREN . param_list RPAREN COLON
+    (10) statement -> FUNCTION ID LPAREN . param_list RPAREN COLON statements END
     (11) statement -> FUNCTION ID LPAREN . RPAREN COLON
     (12) param_list -> . param_list COMMA ID
     (13) param_list -> . ID
@@ -827,7 +827,7 @@ state 43
 state 44
 
     (8) statement -> FUNCTION ID LPAREN param_list . RPAREN COLON expression SEMICOLON
-    (10) statement -> FUNCTION ID LPAREN param_list . RPAREN COLON
+    (10) statement -> FUNCTION ID LPAREN param_list . RPAREN COLON statements END
     (12) param_list -> param_list . COMMA ID
 
     RPAREN          shift and go to state 50
@@ -903,7 +903,7 @@ state 49
 state 50
 
     (8) statement -> FUNCTION ID LPAREN param_list RPAREN . COLON expression SEMICOLON
-    (10) statement -> FUNCTION ID LPAREN param_list RPAREN . COLON
+    (10) statement -> FUNCTION ID LPAREN param_list RPAREN . COLON statements END
 
     COLON           shift and go to state 54
 
@@ -967,7 +967,7 @@ state 53
 state 54
 
     (8) statement -> FUNCTION ID LPAREN param_list RPAREN COLON . expression SEMICOLON
-    (10) statement -> FUNCTION ID LPAREN param_list RPAREN COLON .
+    (10) statement -> FUNCTION ID LPAREN param_list RPAREN COLON . statements END
     (15) expression -> . ID EQUALS INPUT LPAREN RPAREN
     (16) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
     (17) expression -> . expression PLUS expression
@@ -979,26 +979,30 @@ state 54
     (23) expression -> . STRING
     (24) expression -> . NUMBER
     (25) expression -> . ID
+    (1) statements -> . statements statement
+    (2) statements -> . statement
+    (3) statement -> . ID EQUALS expression SEMICOLON
+    (4) statement -> . ID EQUALS STRING SEMICOLON
+    (5) statement -> . PRINT LPAREN STRING RPAREN SEMICOLON
+    (6) statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (7) statement -> . expression SEMICOLON
+    (8) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON
+    (9) statement -> . FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON
+    (10) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON statements END
+    (11) statement -> . FUNCTION ID LPAREN RPAREN COLON
+    (14) statement -> . END
 
-  ! shift/reduce conflict for ID resolved as shift
-  ! shift/reduce conflict for LPAREN resolved as shift
-  ! shift/reduce conflict for STRING resolved as shift
-  ! shift/reduce conflict for NUMBER resolved as shift
-    PRINT           reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON .)
-    FUNCTION        reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON .)
-    END             reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON .)
-    $end            reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON .)
-    ID              shift and go to state 21
+    ID              shift and go to state 57
     LPAREN          shift and go to state 7
     STRING          shift and go to state 5
     NUMBER          shift and go to state 10
+    PRINT           shift and go to state 6
+    FUNCTION        shift and go to state 8
+    END             shift and go to state 9
 
-  ! ID              [ reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON .) ]
-  ! LPAREN          [ reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON .) ]
-  ! STRING          [ reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON .) ]
-  ! NUMBER          [ reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON .) ]
-
-    expression                     shift and go to state 57
+    expression                     shift and go to state 58
+    statements                     shift and go to state 59
+    statement                      shift and go to state 2
 
 state 55
 
@@ -1017,7 +1021,7 @@ state 56
     (20) expression -> expression . DIVIDE expression
     (21) expression -> expression . CONCAT expression
 
-    SEMICOLON       shift and go to state 58
+    SEMICOLON       shift and go to state 60
     PLUS            shift and go to state 14
     MINUS           shift and go to state 15
     TIMES           shift and go to state 16
@@ -1027,14 +1031,32 @@ state 56
 
 state 57
 
+    (15) expression -> ID . EQUALS INPUT LPAREN RPAREN
+    (16) expression -> ID . EQUALS RANDOM LPAREN expression RPAREN
+    (25) expression -> ID .
+    (3) statement -> ID . EQUALS expression SEMICOLON
+    (4) statement -> ID . EQUALS STRING SEMICOLON
+
+    EQUALS          shift and go to state 61
+    SEMICOLON       reduce using rule 25 (expression -> ID .)
+    PLUS            reduce using rule 25 (expression -> ID .)
+    MINUS           reduce using rule 25 (expression -> ID .)
+    TIMES           reduce using rule 25 (expression -> ID .)
+    DIVIDE          reduce using rule 25 (expression -> ID .)
+    CONCAT          reduce using rule 25 (expression -> ID .)
+
+
+state 58
+
     (8) statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression . SEMICOLON
     (17) expression -> expression . PLUS expression
     (18) expression -> expression . MINUS expression
     (19) expression -> expression . TIMES expression
     (20) expression -> expression . DIVIDE expression
     (21) expression -> expression . CONCAT expression
+    (7) statement -> expression . SEMICOLON
 
-    SEMICOLON       shift and go to state 59
+    SEMICOLON       shift and go to state 62
     PLUS            shift and go to state 14
     MINUS           shift and go to state 15
     TIMES           shift and go to state 16
@@ -1042,7 +1064,44 @@ state 57
     CONCAT          shift and go to state 18
 
 
-state 58
+state 59
+
+    (10) statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements . END
+    (1) statements -> statements . statement
+    (3) statement -> . ID EQUALS expression SEMICOLON
+    (4) statement -> . ID EQUALS STRING SEMICOLON
+    (5) statement -> . PRINT LPAREN STRING RPAREN SEMICOLON
+    (6) statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (7) statement -> . expression SEMICOLON
+    (8) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON
+    (9) statement -> . FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON
+    (10) statement -> . FUNCTION ID LPAREN param_list RPAREN COLON statements END
+    (11) statement -> . FUNCTION ID LPAREN RPAREN COLON
+    (14) statement -> . END
+    (15) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (16) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (17) expression -> . expression PLUS expression
+    (18) expression -> . expression MINUS expression
+    (19) expression -> . expression TIMES expression
+    (20) expression -> . expression DIVIDE expression
+    (21) expression -> . expression CONCAT expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . STRING
+    (24) expression -> . NUMBER
+    (25) expression -> . ID
+
+    END             shift and go to state 63
+    ID              shift and go to state 3
+    PRINT           shift and go to state 6
+    FUNCTION        shift and go to state 8
+    LPAREN          shift and go to state 7
+    STRING          shift and go to state 5
+    NUMBER          shift and go to state 10
+
+    statement                      shift and go to state 11
+    expression                     shift and go to state 4
+
+state 60
 
     (9) statement -> FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON .
 
@@ -1056,18 +1115,91 @@ state 58
     $end            reduce using rule 9 (statement -> FUNCTION ID LPAREN RPAREN COLON expression SEMICOLON .)
 
 
-state 59
+state 61
+
+    (15) expression -> ID EQUALS . INPUT LPAREN RPAREN
+    (16) expression -> ID EQUALS . RANDOM LPAREN expression RPAREN
+    (3) statement -> ID EQUALS . expression SEMICOLON
+    (4) statement -> ID EQUALS . STRING SEMICOLON
+    (15) expression -> . ID EQUALS INPUT LPAREN RPAREN
+    (16) expression -> . ID EQUALS RANDOM LPAREN expression RPAREN
+    (17) expression -> . expression PLUS expression
+    (18) expression -> . expression MINUS expression
+    (19) expression -> . expression TIMES expression
+    (20) expression -> . expression DIVIDE expression
+    (21) expression -> . expression CONCAT expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . STRING
+    (24) expression -> . NUMBER
+    (25) expression -> . ID
+
+    INPUT           shift and go to state 25
+    RANDOM          shift and go to state 26
+    STRING          shift and go to state 24
+    ID              shift and go to state 21
+    LPAREN          shift and go to state 7
+    NUMBER          shift and go to state 10
+
+    expression                     shift and go to state 23
+
+state 62
 
     (8) statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .
+    (7) statement -> expression SEMICOLON .
 
-    ID              reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .)
-    PRINT           reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .)
-    FUNCTION        reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .)
-    END             reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .)
-    LPAREN          reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .)
-    STRING          reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .)
-    NUMBER          reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .)
+  ! reduce/reduce conflict for END resolved using rule 7 (statement -> expression SEMICOLON .)
+  ! reduce/reduce conflict for ID resolved using rule 7 (statement -> expression SEMICOLON .)
+  ! reduce/reduce conflict for PRINT resolved using rule 7 (statement -> expression SEMICOLON .)
+  ! reduce/reduce conflict for FUNCTION resolved using rule 7 (statement -> expression SEMICOLON .)
+  ! reduce/reduce conflict for LPAREN resolved using rule 7 (statement -> expression SEMICOLON .)
+  ! reduce/reduce conflict for STRING resolved using rule 7 (statement -> expression SEMICOLON .)
+  ! reduce/reduce conflict for NUMBER resolved using rule 7 (statement -> expression SEMICOLON .)
     $end            reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .)
+    END             reduce using rule 7 (statement -> expression SEMICOLON .)
+    ID              reduce using rule 7 (statement -> expression SEMICOLON .)
+    PRINT           reduce using rule 7 (statement -> expression SEMICOLON .)
+    FUNCTION        reduce using rule 7 (statement -> expression SEMICOLON .)
+    LPAREN          reduce using rule 7 (statement -> expression SEMICOLON .)
+    STRING          reduce using rule 7 (statement -> expression SEMICOLON .)
+    NUMBER          reduce using rule 7 (statement -> expression SEMICOLON .)
+
+  ! ID              [ reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .) ]
+  ! PRINT           [ reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .) ]
+  ! FUNCTION        [ reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .) ]
+  ! END             [ reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .) ]
+  ! LPAREN          [ reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .) ]
+  ! STRING          [ reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .) ]
+  ! NUMBER          [ reduce using rule 8 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON .) ]
+
+
+state 63
+
+    (10) statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .
+    (14) statement -> END .
+
+  ! reduce/reduce conflict for END resolved using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+  ! reduce/reduce conflict for ID resolved using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+  ! reduce/reduce conflict for PRINT resolved using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+  ! reduce/reduce conflict for FUNCTION resolved using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+  ! reduce/reduce conflict for LPAREN resolved using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+  ! reduce/reduce conflict for STRING resolved using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+  ! reduce/reduce conflict for NUMBER resolved using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+    ID              reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+    PRINT           reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+    FUNCTION        reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+    END             reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+    LPAREN          reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+    STRING          reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+    NUMBER          reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+    $end            reduce using rule 10 (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END .)
+
+  ! END             [ reduce using rule 14 (statement -> END .) ]
+  ! ID              [ reduce using rule 14 (statement -> END .) ]
+  ! PRINT           [ reduce using rule 14 (statement -> END .) ]
+  ! FUNCTION        [ reduce using rule 14 (statement -> END .) ]
+  ! LPAREN          [ reduce using rule 14 (statement -> END .) ]
+  ! STRING          [ reduce using rule 14 (statement -> END .) ]
+  ! NUMBER          [ reduce using rule 14 (statement -> END .) ]
 
 WARNING: 
 WARNING: Conflicts:
@@ -1078,7 +1210,7 @@ WARNING: shift/reduce conflict for ID in state 52 resolved as shift
 WARNING: shift/reduce conflict for LPAREN in state 52 resolved as shift
 WARNING: shift/reduce conflict for STRING in state 52 resolved as shift
 WARNING: shift/reduce conflict for NUMBER in state 52 resolved as shift
-WARNING: shift/reduce conflict for ID in state 54 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 54 resolved as shift
-WARNING: shift/reduce conflict for STRING in state 54 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 54 resolved as shift
+WARNING: reduce/reduce conflict in state 62 resolved using rule (statement -> expression SEMICOLON)
+WARNING: rejected rule (statement -> FUNCTION ID LPAREN param_list RPAREN COLON expression SEMICOLON) in state 62
+WARNING: reduce/reduce conflict in state 63 resolved using rule (statement -> FUNCTION ID LPAREN param_list RPAREN COLON statements END)
+WARNING: rejected rule (statement -> END) in state 63

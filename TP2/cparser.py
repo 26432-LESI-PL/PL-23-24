@@ -31,6 +31,7 @@ def p_statement_assign(t):
     if t[1].endswith('?') or t[1].endswith('!'):
         t[1] = t[1][:-1]
     add_code(f"int {t[1]} = {t[3]};")
+    t[0] = f"int {t[1]} = {t[3]};"
 
 def p_statement_assign_string(t):
     'statement : ID EQUALS STRING SEMICOLON'
@@ -74,7 +75,7 @@ def p_statement_function_oneliner_declaration(t):
 
 
 def p_statement_function_declaration(t):
-    '''statement : FUNCTION ID LPAREN param_list RPAREN COLON
+    '''statement : FUNCTION ID LPAREN param_list RPAREN COLON statements END
                  | FUNCTION ID LPAREN RPAREN COLON'''
     if len(t) == 7:  # If the function is only the name and parameters
         params = ', '.join([f'int {param}' for param in t[4]])
