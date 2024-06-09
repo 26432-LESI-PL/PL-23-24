@@ -220,14 +220,24 @@ def p_expression_function_call(t):
     t[0] = f"{t[1]}({', '.join(t[3])})"
     #add_c_code(f"{t[1]}({', '.join(t[3])});")
     #add_python_code(f"{t[1]}({', '.join(t[3])})")
+    #add_c_code(f"{t[1]}({', '.join(t[3])});")
+    #add_python_code(f"{t[1]}({', '.join(t[3])})")
 
 def p_arg_list(t):
     '''arg_list : arg_list COMMA expression
-                | expression'''
+                | arg_list COMMA list
+                | expression
+                | list'''
     if len(t) == 4:
-        t[0] = t[1] + [t[3]]
+        if isinstance(t[3], list):
+            t[0] = t[1] + [f"[{', '.join(t[3])}]"]
+        else:
+            t[0] = t[1] + [t[3]]
     else:
-        t[0] = [t[1]]
+        if isinstance(t[1], list):
+            t[0] = [f"[{', '.join(t[1])}]"]
+        else:
+            t[0] = [t[1]]
 
 def p_error(t):
     if t:
