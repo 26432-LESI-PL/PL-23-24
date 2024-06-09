@@ -37,7 +37,7 @@ jobs:
         python3 main.py --input exemplos/exemplo-B-02.fca
     - name: Exemplo B 03
       run: |
-        python3 main.py --input exemplos/exemplo-B-03.fca < "Olá, mundo!"
+        python3 main.py --input exemplos/exemplo-B-03.fca << "Olá, mundo!"
     - name: Exemplo C 01
       run: |
         python3 main.py --input exemplos/exemplo-C-01.fca
