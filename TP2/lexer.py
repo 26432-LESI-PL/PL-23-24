@@ -4,7 +4,7 @@ import ply.lex as lex
 tokens = [
     'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN',
     'ID', 'EQUALS', 'SEMICOLON', 'STRING', 'CONCAT', 'COMMENT',
-    'COMMA', 'COLON', 'LBRACKET', 'RBRACKET', 'MULTILINE_COMMENT'
+    'COMMA', 'COLON', 'LBRACKET', 'RBRACKET', 'MULTILINE_COMMENT', 'INTERPOLATION'
 ]
 
 # Reserved words
@@ -33,7 +33,15 @@ t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 
 # String literals
-t_STRING = r'"(?:\\.|[^"\\])*"'  # Double-quoted strings with escaped characters and any character except unescaped newline
+def t_STRING(t):
+    r'"(?:\\.|[^"\\])*"'  # Double-quoted strings with escaped characters and any character except unescaped newline
+    return t
+
+# Interpolation
+def t_INTERPOLATION(t):
+    r'\#\{[^\}]*\}'  # Interpolation syntax #{...}
+    t.value = t.value[2:-1]  # Remove the #{ and }
+    return t
 
 # Comment handling
 def t_COMMENT(t):

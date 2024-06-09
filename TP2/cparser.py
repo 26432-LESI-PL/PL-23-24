@@ -2,8 +2,6 @@ import random
 import ply.yacc as yacc
 from lexer import tokens
 
-tokens = tokens
-
 # Precedence rules for arithmetic operators
 precedence = (
     ('left', 'PLUS', 'MINUS'),
@@ -37,7 +35,14 @@ def p_statement_assign_string(t):
 
 def p_statement_print_string(t):
     'statement : PRINT LPAREN STRING RPAREN SEMICOLON'
-    add_code(f'printf({t[3]});')
+    if '#' in t[3]:
+        parts = t[3].split('#{')
+        add_code(f'printf({parts[0]}");')
+        for part in parts[1:]:
+            var_name, rest = part.split('}')
+            add_code(f'printf("%s", {var_name});')
+    else:
+        add_code(f'printf("{t[3].replace("%", "%%")}");')
 
 def p_statement_print_expr(t):
     'statement : PRINT LPAREN expression RPAREN SEMICOLON'
@@ -83,6 +88,7 @@ def p_expression_concat(t):
     add_code(f'strcpy(tmp_{length}, {t[1]});')
     add_code(f'strcat(tmp_{length}, {t[3]});')
     t[0] = f"tmp_{length}"
+    
 def p_expression_group(t):
     'expression : LPAREN expression RPAREN'
     t[0] = f"({t[2]})"
@@ -114,3 +120,4 @@ parser = yacc.yacc()
 def parse(data):
     parser.parse(data)
     return c_code
+
