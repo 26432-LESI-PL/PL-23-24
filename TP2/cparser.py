@@ -17,7 +17,6 @@ c_code = []
 # This will hold the generated Python code
 python_code = []
 
-
 # Helper function to add a line of code
 def add_c_code(line):
     c_code.append(line)
@@ -47,6 +46,39 @@ def p_statement_assign_string(t):
     'statement : ID EQUALS STRING SEMICOLON'
     add_c_code(f"char {t[1]}[] = {t[3]};")
     add_python_code(f"{t[1]} = {t[3]}")
+
+def p_statement_assign_list(t):
+    'statement : ID EQUALS list SEMICOLON'
+    array_size = len(t[3])
+    add_c_code(f"int {t[1]}[] = {{{', '.join(map(str, t[3]))}}};")
+    add_python_code(f"{t[1]} = {t[3]}")
+
+def p_list(t):
+    '''list : LBRACKET elements RBRACKET
+            | LBRACKET RBRACKET'''
+    if len(t) == 3:  # Empty list
+        t[0] = []
+    else:
+        t[0] = t[2]
+
+def p_elements(t):
+    '''elements : elements COMMA expression
+                | expression'''
+    if len(t) == 4:
+        t[0] = t[1] + [t[3]]
+    else:
+        t[0] = [t[1]]
+
+def p_statement_print_list(t):
+    'statement : PRINT LPAREN ID RPAREN SEMICOLON'
+    add_c_code(f'printf("[");')
+    add_c_code(f'int n = sizeof({t[3]}) / sizeof({t[3]}[0]);')
+    add_c_code(f'for(int i = 0; i < n; i++) {{')
+    add_c_code(f'    printf("%d", {t[3]}[i]);')
+    add_c_code(f'    if (i < n - 1) printf(", ");')
+    add_c_code(f'}}')
+    add_c_code(f'printf("]");')
+    add_python_code(f'print({t[3]})')
 
 def p_statement_print_string(t):
     'statement : PRINT LPAREN STRING RPAREN SEMICOLON'
@@ -91,17 +123,22 @@ def p_statement_function_oneliner_declaration(t):
         add_c_code(f'int {t[2]}() {{ return {t[6]}; }}')
         add_python_code(f'def {t[2]}(): return {t[6]}')
 
-
 def p_statement_function_declaration(t):
     '''statement : FUNCTION ID LPAREN param_list RPAREN COLON statements END
-                 | FUNCTION ID LPAREN RPAREN COLON'''
-    if len(t) == 7:  # If the function is only the name and parameters
+                 | FUNCTION ID LPAREN RPAREN COLON statements END'''
+    if len(t) == 8:  # If the function has parameters
         params = ', '.join([f'int {param}' for param in t[4]])
-        add_c_code(f'int {t[2]}({params}) {{}}')
-        add_python_code(f'def {t[2]}({", ".join(t[4])}): pass')
+        add_c_code(f'void {t[2]}({params}) {{')
+        for stmt in t[6]:
+            add_c_code(stmt)
+        add_c_code('}')
+        add_python_code(f'def {t[2]}({", ".join(t[4])}):\n    ' + '\n    '.join(t[6]))
     else:  # If the function has no parameters
-        add_c_code(f'int {t[2]}() {{{t[6]}}}')
-        add_python_code(f'def {t[2]}():\n    {t[6]}')
+        add_c_code(f'void {t[2]}() {{')
+        for stmt in t[6]:
+            add_c_code(stmt)
+        add_c_code('}')
+        add_python_code(f'def {t[2]}():\n    ' + '\n    '.join(t[6]))
 
 def p_param_list(t):
     '''param_list : param_list COMMA ID
@@ -186,4 +223,3 @@ parser = yacc.yacc()
 def parse(data):
     parser.parse(data)
     return python_code, c_code
-
